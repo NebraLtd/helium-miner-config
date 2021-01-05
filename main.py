@@ -1,12 +1,17 @@
 #!/usr/bin/python3
 
-import dbus
+import dbus, uuid
 
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
+
+bus = dbus.SystemBus()
+
+dbusObject = bus.get_object("com.helium.Miner", "/")
+dbusInterface = dbus.Interface(objTest, "com.helium.Miner")
 
 class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
@@ -141,6 +146,8 @@ class WiFiServicesCharacteristic(Characteristic):
 class DiagnosticsCharacteristic(Characteristic):
     SERIAL_NUMBER_CHARACTERISTIC_UUID = "b833d34f-d871-422c-bf9e-8e6ec117d57e"
 
+    #Returns proto of eth, wifi, fw, ip, p2pstatus
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
@@ -148,6 +155,8 @@ class DiagnosticsCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
+
+        dbusInterface.P2PStatus()
         val = "F04CD555B5D9"
 
         for c in val:
@@ -180,7 +189,7 @@ class LightsCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9"
+        val = "false"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -261,7 +270,11 @@ class EthernetOnlineCharacteristic(Characteristic):
     def ReadValue(self, options):
         value = []
 
-        val = "F04CD555B5D9"
+
+        val = "false"
+
+        if(open("/sys/class/net/eth0/carrier").readline().strip()== "1" or open("/sys/class/net/wlan0/carrier").readline().strip()== "1"):
+            val = "true"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
