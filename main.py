@@ -4,153 +4,280 @@ import dbus
 
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
-from gpiozero import CPUTemperature
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
-class ThermometerAdvertisement(Advertisement):
+class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        self.add_local_name("Thermometer")
+        self.add_local_name("Helium Hotspot B5D9")
         self.include_tx_power = True
 
-class ThermometerService(Service):
-    THERMOMETER_SVC_UUID = "00000001-710e-4a5b-8d75-3e5b444bc3cf"
+class DeviceInformationService(Service):
+    DEVINFO_SVC_UUID = "180A"
 
     def __init__(self, index):
-        self.farenheit = True
 
-        Service.__init__(self, index, self.THERMOMETER_SVC_UUID, True)
-        self.add_characteristic(TempCharacteristic(self))
-        self.add_characteristic(UnitCharacteristic(self))
+        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
+        self.add_characteristic(ManufactureNameCharacteristic(self))
+        self.add_characteristic(FirmwareRevisionCharacteristic(self))
+        self.add_characteristic(SerialNumberCharacteristic(self))
 
-    def is_farenheit(self):
-        return self.farenheit
-
-    def set_farenheit(self, farenheit):
-        self.farenheit = farenheit
-
-class TempCharacteristic(Characteristic):
-    TEMP_CHARACTERISTIC_UUID = "00000002-710e-4a5b-8d75-3e5b444bc3cf"
-
-    def __init__(self, service):
-        self.notifying = False
-
-        Characteristic.__init__(
-                self, self.TEMP_CHARACTERISTIC_UUID,
-                ["notify", "read"], service)
-        self.add_descriptor(TempDescriptor(self))
-
-    def get_temperature(self):
-        value = []
-        unit = "C"
-
-        cpu = CPUTemperature()
-        temp = cpu.temperature
-        if self.service.is_farenheit():
-            temp = (temp * 1.8) + 32
-            unit = "F"
-
-        strtemp = str(round(temp, 1)) + " " + unit
-        for c in strtemp:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
-
-    def set_temperature_callback(self):
-        if self.notifying:
-            value = self.get_temperature()
-            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-
-        return self.notifying
-
-    def StartNotify(self):
-        if self.notifying:
-            return
-
-        self.notifying = True
-
-        value = self.get_temperature()
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(NOTIFY_TIMEOUT, self.set_temperature_callback)
-
-    def StopNotify(self):
-        self.notifying = False
-
-    def ReadValue(self, options):
-        value = self.get_temperature()
-
-        return value
-
-class TempDescriptor(Descriptor):
-    TEMP_DESCRIPTOR_UUID = "2901"
-    TEMP_DESCRIPTOR_VALUE = "CPU Temperature"
-
-    def __init__(self, characteristic):
-        Descriptor.__init__(
-                self, self.TEMP_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
-
-    def ReadValue(self, options):
-        value = []
-        desc = self.TEMP_DESCRIPTOR_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-
-        return value
-
-class UnitCharacteristic(Characteristic):
-    UNIT_CHARACTERISTIC_UUID = "00000003-710e-4a5b-8d75-3e5b444bc3cf"
+class ManufactureNameCharacteristic(Characteristic):
+    MANUFACTURE_NAME_CHARACTERISTIC_UUID = "2A29"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.UNIT_CHARACTERISTIC_UUID,
-                ["read", "write"], service)
-        self.add_descriptor(UnitDescriptor(self))
-
-    def WriteValue(self, value, options):
-        val = str(value[0]).upper()
-        if val == "C":
-            self.service.set_farenheit(False)
-        elif val == "F":
-            self.service.set_farenheit(True)
+                self, self.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
+                ["read"], service)
 
     def ReadValue(self, options):
         value = []
-
-        if self.service.is_farenheit(): val = "F"
-        else: val = "C"
-        value.append(dbus.Byte(val.encode()))
-
+        val = "Nebra LTD."
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
         return value
 
-class UnitDescriptor(Descriptor):
-    UNIT_DESCRIPTOR_UUID = "2901"
-    UNIT_DESCRIPTOR_VALUE = "Temperature Units (F or C)"
+class FirmwareRevisionCharacteristic(Characteristic):
+    FIRMWARE_REVISION_CHARACTERISTIC_UUID = "2A26"
 
-    def __init__(self, characteristic):
-        Descriptor.__init__(
-                self, self.UNIT_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.FIRMWARE_REVISION_CHARACTERISTIC_UUID,
+                ["read"], service)
 
     def ReadValue(self, options):
         value = []
-        desc = self.UNIT_DESCRIPTOR_VALUE
-
-        for c in desc:
+        #CHANGE THIS LINE FOR NEW VERSIONS
+        val = "2021.01.05"
+        for c in val:
             value.append(dbus.Byte(c.encode()))
 
         return value
+
+class SerialNumberCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "2A25"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class HeliumService(Service):
+    DEVINFO_SVC_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
+
+    def __init__(self, index):
+
+        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
+        self.add_characteristic(OnboardingKeyCharacteristic(self))
+        self.add_characteristic(PublicKeyCharacteristic(self))
+        self.add_characteristic(WiFiServicesCharacteristic(self))
+        self.add_characteristic(DiagnosticsCharacteristic(self))
+        self.add_characteristic(MacAddressCharacteristic(self))
+        self.add_characteristic(LightsCharacteristic(self))
+        self.add_characteristic(WiFiSSIDCharacteristic(self))
+        self.add_characteristic(AssertLocationCharacteristic(self))
+        self.add_characteristic(AddGatewayCharacteristic(self))
+        self.add_characteristic(WiFiConnectCharacteristic(self))
+        self.add_characteristic(EthernetOnlineCharacteristic(self))
+
+class OnboardingKeyCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "d083b2bd-be16-4600-b397-61512ca2f5ad"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class PublicKeyCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "0a852c59-50d3-4492-bfd3-22fe58a24f01"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class WiFiServicesCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "d7515033-7e7b-45be-803f-c8737b171a29"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class DiagnosticsCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "b833d34f-d871-422c-bf9e-8e6ec117d57e"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class MacAddressCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "9c4314f2-8a0c-45fd-a58d-d4a7e64c3a57"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class LightsCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "180efdef-7579-4b4a-b2df-72733b7fa2fe"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class WiFiSSIDCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "7731de63-bc6a-4100-8ab1-89b2356b038b"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class AssertLocationCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "d435f5de-01a4-4e7d-84ba-dfd347f60275"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class AddGatewayCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "df3b16ca-c985-4da2-a6d2-9b9b9abdb858"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class WiFiConnectCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "398168aa-0111-4ec0-b1fa-171671270608"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class EthernetOnlineCharacteristic(Characteristic):
+    SERIAL_NUMBER_CHARACTERISTIC_UUID = "e5866bd6-0288-4476-98ca-ef7da6b4d289"
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        value = []
+
+        val = "F04CD555B5D9"
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+
+
+
 
 app = Application()
-app.add_service(ThermometerService(0))
+app.add_service(DeviceInformationService(0))
+app.add_service(HeliumService(1))
 app.register()
 
-adv = ThermometerAdvertisement(0)
+
+adv = ConfigAdvertisement(0)
 adv.register()
 
 try:
