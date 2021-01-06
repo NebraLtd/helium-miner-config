@@ -93,13 +93,12 @@ class HeliumService(Service):
         self.add_characteristic(EthernetOnlineCharacteristic(self))
 
 class OnboardingKeyCharacteristic(Characteristic):
-    ONBOARDING_KEY_CHARACTERISTIC_UUID = "d083b2bd-be16-4600-b397-61512ca2f5ad"
-
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.ONBOARDING_KEY_CHARACTERISTIC_UUID,
+                self, uuids.ONBOARDING_KEY_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(OnboardingKeyDescriptor(self))
+        self.add_descriptor(OnboardingKeyFormat(self))
 
     def ReadValue(self, options):
         value = []
@@ -109,13 +108,27 @@ class OnboardingKeyCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
-class OnboardingKeyDescriptor(Descriptor):
-    DESCRIPTOR_UUID = "2901"
+class OnboardingKeyDescription(Descriptor):
     ONBOARDING_KEY_VALUE = "Onboarding Key"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID = "2901",
+                ["read"],
+                characteristic)
+    def ReadValue(self, options):
+        value = []
+        desc = self.ONBOARDING_KEY_VALUE
+
+        for c in desc:
+            value.append(dbus.Byte(c.encode()))
+        return value
+class OnboardingKeyFormat(Descriptor):
+    ONBOARDING_KEY_VALUE = "Onboarding Key"
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+                self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -128,11 +141,10 @@ class OnboardingKeyDescriptor(Descriptor):
 
 
 class PublicKeyCharacteristic(Characteristic):
-    PUBLIC_KEY_CHARACTERISTIC_UUID = "0a852c59-50d3-4492-bfd3-22fe58a24f01"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.PUBLIC_KEY_CHARACTERISTIC_UUID,
+                self, uuids.PUBLIC_KEY_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(PublicKeyDescriptor(self))
 
