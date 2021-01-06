@@ -13,7 +13,7 @@ NOTIFY_TIMEOUT = 5000
 class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        macAddressTrimmed = open("/sys/class/net/enp1s0f1/address").readline().strip().replace(":","")[-4:]
+        macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:]
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
