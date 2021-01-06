@@ -17,6 +17,7 @@ class ConfigAdvertisement(Advertisement):
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
+        self.service_uuids = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
 
 class DeviceInformationService(Service):
     def __init__(self, index):
