@@ -157,7 +157,6 @@ class PublicKeyCharacteristic(Characteristic):
 
 class PublicKeyDescriptor(Descriptor):
 
-
     def __init__(self, characteristic):
         Descriptor.__init__(
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
@@ -172,11 +171,10 @@ class PublicKeyDescriptor(Descriptor):
         return value
 
 class WiFiServicesCharacteristic(Characteristic):
-    WIFI_SERVICES_CHARACTERISTIC_UUID = "d7515033-7e7b-45be-803f-c8737b171a29"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.WIFI_SERVICES_CHARACTERISTIC_UUID,
+                self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -203,8 +201,6 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class DiagnosticsCharacteristic(Characteristic):
-    DIAGNOSTICS_CHARACTERISTIC_UUID = "b833d34f-d871-422c-bf9e-8e6ec117d57e"
-
     #Returns proto of eth, wifi, fw, ip, p2pstatus
 
     def __init__(self, service):
