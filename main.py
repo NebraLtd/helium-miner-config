@@ -320,7 +320,7 @@ class AssertLocationCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(AssertLocationDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -330,8 +330,7 @@ class AssertLocationCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class AssertLocationDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -340,7 +339,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.ASSERT_LOCATION_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -352,7 +351,7 @@ class AddGatewayCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -362,8 +361,7 @@ class AddGatewayCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class AddGatewayDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -372,7 +370,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuid.ADD_GATEWAY_KEY_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -384,7 +382,7 @@ class WiFiConnectCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(WiFiConnectDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -394,8 +392,7 @@ class WiFiConnectCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class WiFiConnectDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -404,7 +401,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.ONBOARDING_KEY_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -416,7 +413,7 @@ class EthernetOnlineCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ETHERNET_ONLINE_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(EthernetOnlineDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
