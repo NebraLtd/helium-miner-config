@@ -234,11 +234,10 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class MacAddressCharacteristic(Characteristic):
-    MAC_ADDRESS_CHARACTERISTIC_UUID = "9c4314f2-8a0c-45fd-a58d-d4a7e64c3a57"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.MAC_ADDRESS_CHARACTERISTIC_UUID,
+                self, uuids.MAC_ADDRESS_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -265,11 +264,10 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class LightsCharacteristic(Characteristic):
-    LIGHTS_CHARACTERISTIC_UUID = "180efdef-7579-4b4a-b2df-72733b7fa2fe"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.LIGHTS_CHARACTERISTIC_UUID,
+                self, uuids.LIGHTS_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -296,11 +294,10 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class WiFiSSIDCharacteristic(Characteristic):
-    WIFI_SSID_CHARACTERISTIC_UUID = "7731de63-bc6a-4100-8ab1-89b2356b038b"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.WIFI_SSID_CHARACTERISTIC_UUID,
+                self, uuids.WIFI_SSID_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -327,11 +324,10 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class AssertLocationCharacteristic(Characteristic):
-    ASSERT_LOCATION_CHARACTERISTIC_UUID = "d435f5de-01a4-4e7d-84ba-dfd347f60275"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.ASSERT_LOCATION_CHARACTERISTIC_UUID,
+                self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -358,7 +354,6 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class AddGatewayCharacteristic(Characteristic):
-    ADD_GATEWAY_CHARACTERISTIC_UUID = "df3b16ca-c985-4da2-a6d2-9b9b9abdb858"
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -389,7 +384,6 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class WiFiConnectCharacteristic(Characteristic):
-    WIFI_CONNECT_CHARACTERISTIC_UUID = "398168aa-0111-4ec0-b1fa-171671270608"
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -420,7 +414,6 @@ class OnboardingKeyDescriptor(Descriptor):
         return value
 
 class EthernetOnlineCharacteristic(Characteristic):
-    ETHERNET_ONLINE_CHARACTERISTIC_UUID = "e5866bd6-0288-4476-98ca-ef7da6b4d289"
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -440,7 +433,6 @@ class EthernetOnlineCharacteristic(Characteristic):
         return value
 
 class EthernetOnlineDescriptor(Descriptor):
-    ETHERNET_ONLINE_VALUE = "Ethernet Online"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -449,7 +441,7 @@ class EthernetOnlineDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.ETHERNET_ONLINE_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
