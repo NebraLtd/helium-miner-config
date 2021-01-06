@@ -19,21 +19,16 @@ class ConfigAdvertisement(Advertisement):
         self.include_tx_power = True
 
 class DeviceInformationService(Service):
-    DEVINFO_SVC_UUID = "180A"
-
     def __init__(self, index):
-
-        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
+        Service.__init__(self, index, uuids.DEVINFO_SVC_UUID, True)
         self.add_characteristic(ManufactureNameCharacteristic(self))
         self.add_characteristic(FirmwareRevisionCharacteristic(self))
         self.add_characteristic(SerialNumberCharacteristic(self))
 
 class ManufactureNameCharacteristic(Characteristic):
-    MANUFACTURE_NAME_CHARACTERISTIC_UUID = "2A29"
-
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
+                self, uuids.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -44,28 +39,25 @@ class ManufactureNameCharacteristic(Characteristic):
         return value
 
 class FirmwareRevisionCharacteristic(Characteristic):
-    FIRMWARE_REVISION_CHARACTERISTIC_UUID = "2A26"
-
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.FIRMWARE_REVISION_CHARACTERISTIC_UUID,
+                self, uuids.FIRMWARE_REVISION_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
         value = []
         #CHANGE THIS LINE FOR NEW VERSIONS
-        val = "2021.01.05"
+        val = "2021.01.06.01"
         for c in val:
             value.append(dbus.Byte(c.encode()))
 
         return value
 
 class SerialNumberCharacteristic(Characteristic):
-    SERIAL_NUMBER_CHARACTERISTIC_UUID = "2A25"
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.SERIAL_NUMBER_CHARACTERISTIC_UUID,
+                self, uuids.SERIAL_NUMBER_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -100,7 +92,7 @@ class OnboardingKeyCharacteristic(Characteristic):
                 self, uuids.ONBOARDING_KEY_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(OnboardingKeyDescriptor(self))
-        self.add_descriptor(OnboardingKeyFormat(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -125,21 +117,6 @@ class OnboardingKeyDescription(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyFormat(Descriptor):
-
-    def __init__(self, characteristic):
-        Descriptor.__init__(
-                self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
-                ["read"],
-                characteristic)
-    def ReadValue(self, options):
-        value = []
-        desc = uuids.ONBOARDING_KEY_VALUE
-
-        for c in desc:
-            value.append(dbus.Byte(c.encode()))
-        return value
-
 
 class PublicKeyCharacteristic(Characteristic):
 
@@ -148,6 +125,7 @@ class PublicKeyCharacteristic(Characteristic):
                 self, uuids.PUBLIC_KEY_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -178,6 +156,9 @@ class WiFiServicesCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
+
 
     def ReadValue(self, options):
         value = []
@@ -209,6 +190,8 @@ class DiagnosticsCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -241,6 +224,8 @@ class MacAddressCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.MAC_ADDRESS_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -271,6 +256,8 @@ class LightsCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.LIGHTS_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -301,6 +288,8 @@ class WiFiSSIDCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_SSID_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -331,6 +320,8 @@ class AssertLocationCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -361,6 +352,8 @@ class AddGatewayCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -391,6 +384,8 @@ class WiFiConnectCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -421,6 +416,8 @@ class EthernetOnlineCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.ETHERNET_ONLINE_CHARACTERISTIC_UUID,
                 ["read"], service)
+        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
         value = []
@@ -449,6 +446,24 @@ class EthernetOnlineDescriptor(Descriptor):
             value.append(dbus.Byte(c.encode()))
         return value
 
+class utf8Format(Descriptor):
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+                self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
+                ["read"],
+                characteristic)
+    def ReadValue(self, options):
+        value = []
+        value.append(dbus.Byte(0x19))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x01))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+
+        return value
 
 app = Application()
 app.add_service(DeviceInformationService(0))
