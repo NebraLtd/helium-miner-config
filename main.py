@@ -124,7 +124,6 @@ class OnboardingKeyDescription(Descriptor):
             value.append(dbus.Byte(c.encode()))
         return value
 class OnboardingKeyFormat(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -133,7 +132,7 @@ class OnboardingKeyFormat(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.ONBOARDING_KEY_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -158,7 +157,6 @@ class PublicKeyCharacteristic(Characteristic):
 
 class PublicKeyDescriptor(Descriptor):
 
-    PUBLIC_KEY_VALUE = "Public Key"
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -167,7 +165,7 @@ class PublicKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.PUBLIC_KEY_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
