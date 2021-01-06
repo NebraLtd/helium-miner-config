@@ -96,7 +96,7 @@ class OnboardingKeyCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9" #PLACEHOLDER
+        val = "11TqqVzycXK5k49bXbmcUcSne91krq7v3VSQCfDXr" #PLACEHOLDER
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -128,7 +128,7 @@ class PublicKeyCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9"
+        val = "117ei8D1Bk2kYqWNjSFuLgg3BrtTNSTi2tt14LRUFgt" #PLACEHOLDER
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
