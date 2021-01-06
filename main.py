@@ -354,6 +354,7 @@ class AddGatewayCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
 class AddGatewayDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -363,7 +364,7 @@ class AddGatewayDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = uuid.ADD_GATEWAY_KEY_VALUE
+        desc = uuids.ADD_GATEWAY_KEY_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
