@@ -157,7 +157,7 @@ class WiFiServicesCharacteristic(Characteristic):
                 self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(WiFiServicesDescriptor(self))
-        self.add_descriptor(utf8Format(self))
+        self.add_descriptor(opaqueStructure(self))
 
 
     def ReadValue(self, options):
@@ -190,7 +190,7 @@ class DiagnosticsCharacteristic(Characteristic):
                 self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(DiagnosticsDescriptor(self))
-        self.add_descriptor(utf8Format(self))
+        self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
         value = []
@@ -315,7 +315,7 @@ class AssertLocationCharacteristic(Characteristic):
                 self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(AssertLocationDescriptor(self))
-        self.add_descriptor(utf8Format(self))
+        self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
         value = []
@@ -346,7 +346,7 @@ class AddGatewayCharacteristic(Characteristic):
                 self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
-        self.add_descriptor(utf8Format(self))
+        self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
         value = []
@@ -378,7 +378,7 @@ class WiFiConnectCharacteristic(Characteristic):
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(WiFiConnectDescriptor(self))
-        self.add_descriptor(utf8Format(self))
+        self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
         value = []
@@ -448,6 +448,24 @@ class utf8Format(Descriptor):
     def ReadValue(self, options):
         value = []
         value.append(dbus.Byte(0x19))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x01))
+        value.append(dbus.Byte(0x00))
+        value.append(dbus.Byte(0x00))
+
+        return value
+class opaqueStructure(Descriptor):
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+                self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
+                ["read"],
+                characteristic)
+    def ReadValue(self, options):
+        value = []
+        value.append(dbus.Byte(0x1B))
         value.append(dbus.Byte(0x00))
         value.append(dbus.Byte(0x00))
         value.append(dbus.Byte(0x00))
