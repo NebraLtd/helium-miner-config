@@ -113,7 +113,7 @@ class OnboardingKeyDescription(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.USER_DESC_DESCRIPTOR_UUID = "2901",
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -162,7 +162,7 @@ class PublicKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -193,7 +193,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -228,7 +228,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -259,7 +259,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -290,7 +290,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -321,7 +321,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -352,7 +352,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -383,7 +383,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -414,7 +414,7 @@ class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
@@ -450,7 +450,7 @@ class EthernetOnlineDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
-                self, uuids.DESCRIPTOR_UUID,
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
     def ReadValue(self, options):
