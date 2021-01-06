@@ -205,7 +205,7 @@ class DiagnosticsCharacteristic(Characteristic):
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.DIAGNOSTICS_CHARACTERISTIC_UUID,
+                self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -357,7 +357,7 @@ class AddGatewayCharacteristic(Characteristic):
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.ADD_GATEWAY_CHARACTERISTIC_UUID,
+                self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -387,7 +387,7 @@ class WiFiConnectCharacteristic(Characteristic):
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.WIFI_CONNECT_CHARACTERISTIC_UUID,
+                self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
@@ -417,7 +417,7 @@ class EthernetOnlineCharacteristic(Characteristic):
 
     def __init__(self, service):
         Characteristic.__init__(
-                self, self.ETHERNET_ONLINE_CHARACTERISTIC_UUID,
+                self, uuids.ETHERNET_ONLINE_CHARACTERISTIC_UUID,
                 ["read"], service)
 
     def ReadValue(self, options):
