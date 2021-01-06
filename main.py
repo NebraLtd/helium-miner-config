@@ -450,7 +450,7 @@ class EthernetOnlineDescriptor(Descriptor):
 
 app = Application()
 app.add_service(DeviceInformationService(0))
-#app.add_service(HeliumService(1))
+app.add_service(HeliumService(1))
 app.register()
 
 
