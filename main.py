@@ -167,8 +167,7 @@ class WiFiServicesCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class WiFiServicesDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -177,7 +176,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.WIFI_SERVICES_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -190,7 +189,7 @@ class DiagnosticsCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(DiagnosticsDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -202,8 +201,7 @@ class DiagnosticsCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class DiagnosticsDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -212,7 +210,11 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.DIAGNOSTICS_VALUE
+ssages
+￼
+￼
+ ￼
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -224,7 +226,7 @@ class MacAddressCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.MAC_ADDRESS_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(MacAddressDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -234,8 +236,7 @@ class MacAddressCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class MacAddressDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -244,7 +245,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.MAC_ADDRESS_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -266,8 +267,7 @@ class LightsCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class LightsDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -276,7 +276,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.LIGHTS_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
@@ -288,7 +288,7 @@ class WiFiSSIDCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_SSID_CHARACTERISTIC_UUID,
                 ["read"], service)
-        self.add_descriptor(PublicKeyDescriptor(self))
+        self.add_descriptor(WiFiSSIDDescriptor(self))
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
@@ -298,8 +298,7 @@ class WiFiSSIDCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
-class OnboardingKeyDescriptor(Descriptor):
-    ONBOARDING_KEY_VALUE = "Onboarding Key"
+class WiFiSSIDDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -308,7 +307,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = self.ONBOARDING_KEY_VALUE
+        desc = uuids.WIFI_SSID_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
