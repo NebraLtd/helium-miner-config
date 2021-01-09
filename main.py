@@ -5,6 +5,7 @@ import dbus, uuid
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import uuids
+import wifi_services_pb2
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
@@ -161,8 +162,16 @@ class WiFiServicesCharacteristic(Characteristic):
 
 
     def ReadValue(self, options):
+        wifiSsids = wifi_services_pb2.wifi_services_v1()
+
+        wifiSsids.services.append("RTK")
+        wifiSsids.services.append("RTK2")
+        wifiSsids.services.append("SKYXTWIW")
+
+
+        pprint(wifiSsids.SerializeToString().hex())
         value = []
-        val = "F04CD555B5D9"
+        val = wifiSsids.SerializeToString().hex()
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
