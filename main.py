@@ -172,9 +172,6 @@ class WiFiServicesCharacteristic(Characteristic):
         wifiSsids.services.append("RTK")
         wifiSsids.services.append("RTK2")
         wifiSsids.services.append("SKYXTWIW")
-
-
-        pprint(wifiSsids.SerializeToString().hex())
         value = []
         val = wifiSsids.SerializeToString()
 
