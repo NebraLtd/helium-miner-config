@@ -14,7 +14,12 @@ NOTIFY_TIMEOUT = 5000
 class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
-        macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
+        macAddressTrimmed = ""
+        try:
+            macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
+        except:
+            macAddressTrimmed = open("/sys/class/net/enp3s0/address").readline().strip().replace(":","")[-4:].upper()
+
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
@@ -171,10 +176,10 @@ class WiFiServicesCharacteristic(Characteristic):
 
         pprint(wifiSsids.SerializeToString().hex())
         value = []
-        val = wifiSsids.SerializeToString().hex()
+        val = wifiSsids.SerializeToString()
 
         for c in val:
-            value.append(dbus.Byte(c.encode()))
+            value.append(dbus.Byte(c))
         return value
 class WiFiServicesDescriptor(Descriptor):
 
