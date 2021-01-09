@@ -15,11 +15,8 @@ class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         macAddressTrimmed = ""
-        try:
-            macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
-        except:
-            macAddressTrimmed = open("/sys/class/net/enp3s0/address").readline().strip().replace(":","")[-4:].upper()
-
+        
+        macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
