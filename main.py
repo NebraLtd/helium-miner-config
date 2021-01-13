@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import dbus, uuid, NetworkManager
+from pprint import pprint
 
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
@@ -386,9 +387,12 @@ class WiFiConnectCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
-                ["read"], service)
+                ["read", "write"], service)
         self.add_descriptor(WiFiConnectDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+
+    def WriteValue(self, value, options):
+        pprint(value)
 
     def ReadValue(self, options):
         value = []
