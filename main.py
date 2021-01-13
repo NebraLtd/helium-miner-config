@@ -408,6 +408,10 @@ class WiFiConnectCharacteristic(Characteristic):
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
         self.add_timeout(NOTIFY_TIMEOUT, self.WiFiConnectCallback)
 
+    def StopNotify(self):
+        self.notifying = False
+
+
     def WriteValue(self, value, options):
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(dbusRaw))
