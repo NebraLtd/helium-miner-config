@@ -207,7 +207,7 @@ class DiagnosticsCharacteristic(Characteristic):
         value = []
 
         dbusInterface.P2PStatus()
-        val = "F04CD555B5D9"
+        val = ""
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -361,7 +361,7 @@ class AddGatewayCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9"
+        val = ""
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -394,7 +394,7 @@ class WiFiConnectCharacteristic(Characteristic):
     def WriteValue(self, value, options):
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(dbusRaw))
-        pprint(value)
+        pprint(wiFiDetails)
 
     def ReadValue(self, options):
         value = []
