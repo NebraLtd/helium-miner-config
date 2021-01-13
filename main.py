@@ -298,7 +298,7 @@ class WiFiSSIDCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9"
+        val = "RTK"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
