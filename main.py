@@ -398,7 +398,7 @@ class WiFiConnectCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = ""
+        val = "connected"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
