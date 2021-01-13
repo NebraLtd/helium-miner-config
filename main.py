@@ -17,7 +17,7 @@ class ConfigAdvertisement(Advertisement):
         Advertisement.__init__(self, index, "peripheral")
         macAddressTrimmed = ""
 
-        macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
+        macAddressTrimmed = open("/sys/class/net/enp3s0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
@@ -387,9 +387,26 @@ class WiFiConnectCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
-                ["read", "write"], service)
+                ["read", "write", "notify"], service)
         self.add_descriptor(WiFiConnectDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+
+    def WiFiConnectCallback(self):
+        if self.notifying:
+            value = "connected"
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        value = "connected"
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(NOTIFY_TIMEOUT, self.WiFiConnectCallback)
 
     def WriteValue(self, value, options):
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
