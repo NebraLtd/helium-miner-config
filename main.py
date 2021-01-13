@@ -299,7 +299,7 @@ class WiFiSSIDCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         value = []
-        val = "RTK"
+        val = ""
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -392,11 +392,13 @@ class WiFiConnectCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
 
     def WriteValue(self, value, options):
+        wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
+        wiFiDetails.ParseFromString(bytes(dbusRaw))
         pprint(value)
 
     def ReadValue(self, options):
         value = []
-        val = "F04CD555B5D9"
+        val = ""
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
