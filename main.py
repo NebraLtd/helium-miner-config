@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import dbus, uuid, NetworkManager
+import dbus, uuid, NetworkManager, logging, sys
 from pprint import pprint
 
 from advertisement import Advertisement
@@ -10,6 +10,8 @@ import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, 
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 class ConfigAdvertisement(Advertisement):
@@ -298,6 +300,9 @@ class WiFiSSIDCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+
+        logging.debug('Read WiFi SSID')
+
         value = []
         val = ""
 
@@ -311,7 +316,9 @@ class WiFiSSIDDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
+
         value = []
         desc = uuids.WIFI_SSID_VALUE
 
@@ -399,6 +406,8 @@ class WiFiConnectCharacteristic(Characteristic):
         return self.notifying
 
     def StartNotify(self):
+
+        logging.debug('Notify WiFi Connect')
         if self.notifying:
             return
 
@@ -413,13 +422,16 @@ class WiFiConnectCharacteristic(Characteristic):
 
 
     def WriteValue(self, value, options):
+        logging.debug('Write WiFi Connect')
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
-        wiFiDetails.ParseFromString(bytes(dbusRaw))
-        pprint(wiFiDetails)
+        wiFiDetails.ParseFromString(bytes(value))
 
     def ReadValue(self, options):
+
+        logging.debug('Read WiFi Connect')
+
         value = []
-        val = "connected"
+        val = ""
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -449,6 +461,9 @@ class EthernetOnlineCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+
+        logging.debug('Read Ethernet Online')
+
         value = []
 
         val = "false"
@@ -511,6 +526,7 @@ class opaqueStructure(Descriptor):
         value.append(dbus.Byte(0x00))
 
         return value
+
 
 app = Application()
 app.add_service(DeviceInformationService(0))
