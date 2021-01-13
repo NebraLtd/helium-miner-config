@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import dbus, uuid
+import dbus, uuid, NetworkManager
 
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
@@ -15,7 +15,7 @@ class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         macAddressTrimmed = ""
-        
+
         macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
@@ -166,9 +166,11 @@ class WiFiServicesCharacteristic(Characteristic):
     def ReadValue(self, options):
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
-        wifiSsids.services.append("RTK")
-        wifiSsids.services.append("RTK2")
-        wifiSsids.services.append("SKYXTWIW")
+        for dev in NetworkManager.NetworkManager.GetDevices():
+            if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
+                continue
+            for ap in dev.GetAccessPoints():
+                wifiSsids.services.append(str(ap.Ssid))
         value = []
         val = wifiSsids.SerializeToString()
 
