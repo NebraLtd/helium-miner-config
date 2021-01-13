@@ -2,7 +2,7 @@
 
 import dbus, uuid, NetworkManager, logging, sys
 from pprint import pprint
-
+from time import sleep
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import uuids
@@ -19,7 +19,7 @@ class ConfigAdvertisement(Advertisement):
         Advertisement.__init__(self, index, "peripheral")
         macAddressTrimmed = ""
 
-        macAddressTrimmed = open("/sys/class/net/enp3s0/address").readline().strip().replace(":","")[-4:].upper()
+        macAddressTrimmed = open("/sys/class/net/wlp3s0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
         self.include_tx_power = True
@@ -392,15 +392,22 @@ class AddGatewayDescriptor(Descriptor):
 class WiFiConnectCharacteristic(Characteristic):
 
     def __init__(self, service):
+        self.notifying = False
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
         self.add_descriptor(WiFiConnectDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+        self.WiFiStatus = ""
 
     def WiFiConnectCallback(self):
         if self.notifying:
-            value = "connected"
+            logging.debug('Callback WiFi Connect')
+            value = []
+            self.WiFiStatus = "timeout"
+
+            for c in self.WiFiStatus:
+                value.append(dbus.Byte(c.encode()))
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
 
         return self.notifying
@@ -413,9 +420,12 @@ class WiFiConnectCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = "connected"
+        value = []
+
+        for c in self.WiFiStatus:
+            value.append(dbus.Byte(c.encode()))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(NOTIFY_TIMEOUT, self.WiFiConnectCallback)
+        self.add_timeout(10000, self.WiFiConnectCallback)
 
     def StopNotify(self):
         self.notifying = False
@@ -425,15 +435,17 @@ class WiFiConnectCharacteristic(Characteristic):
         logging.debug('Write WiFi Connect')
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(value))
+        self.WiFiStatus = "connecting"
+
+
 
     def ReadValue(self, options):
 
         logging.debug('Read WiFi Connect')
 
         value = []
-        val = ""
 
-        for c in val:
+        for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         return value
 class WiFiConnectDescriptor(Descriptor):
