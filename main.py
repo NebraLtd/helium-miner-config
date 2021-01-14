@@ -15,10 +15,10 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 class ConfigAdvertisement(Advertisement):
+    #BLE advertisement
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         macAddressTrimmed = ""
-
         macAddressTrimmed = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Helium Hotspot %s" % (macAddressTrimmed)
         self.add_local_name(localName)
@@ -26,6 +26,7 @@ class ConfigAdvertisement(Advertisement):
         self.service_uuids = ["0fda92b2-44a2-4af2-84f5-fa682baa2b8d"]
 
 class DeviceInformationService(Service):
+    #Service that provides basic information
     def __init__(self, index):
         Service.__init__(self, index, uuids.DEVINFO_SVC_UUID, True)
         self.add_characteristic(ManufactureNameCharacteristic(self))
@@ -37,7 +38,6 @@ class ManufactureNameCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
                 ["read"], service)
-
     def ReadValue(self, options):
         value = []
         val = "Nebra LTD."
