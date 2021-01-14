@@ -102,6 +102,7 @@ class OnboardingKeyCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Onboarding Key')
         value = []
         val = "11TqqVzycXK5k49bXbmcUcSne91krq7v3VSQCfDXr" #PLACEHOLDER
 
@@ -134,6 +135,7 @@ class PublicKeyCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Public Key')
         value = []
         val = "117ei8D1Bk2kYqWNjSFuLgg3BrtTNSTi2tt14LRUFgt" #PLACEHOLDER
 
@@ -167,6 +169,7 @@ class WiFiServicesCharacteristic(Characteristic):
 
 
     def ReadValue(self, options):
+        logging.debug('Read WiFi Services')
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
         for dev in NetworkManager.NetworkManager.GetDevices():
@@ -206,6 +209,7 @@ class DiagnosticsCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
+        logging.debug('Read diagnostics')
         value = []
 
         dbusInterface.P2PStatus()
@@ -238,6 +242,7 @@ class MacAddressCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Mac Address')
         value = []
         val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
 
@@ -269,6 +274,7 @@ class LightsCharacteristic(Characteristic):
         self.add_descriptor(utf8Format(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Lights')
         value = []
         val = "false"
 
@@ -336,6 +342,7 @@ class AssertLocationCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Assert Location')
         value = []
         val = "F04CD555B5D9"
 
@@ -367,6 +374,7 @@ class AddGatewayCharacteristic(Characteristic):
         self.add_descriptor(opaqueStructure(self))
 
     def ReadValue(self, options):
+        logging.debug('Read Add Gateway')
         value = []
         val = ""
 
