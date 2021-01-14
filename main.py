@@ -309,10 +309,19 @@ class WiFiSSIDCharacteristic(Characteristic):
 
         logging.debug('Read WiFi SSID')
 
-        value = []
-        val = ""
+        activeConnection = ""
+        for conn in NetworkManager.NetworkManager.ActiveConnections:
+            settings = conn.Connection.GetSettings()
 
-        for c in val:
+            devices = ""
+            if conn.Devices:
+                for x in conn.Devices:
+                    if(x.Interface == "wlx7cdd908136ed"):
+                        activeConnection = settings['802-11-wireless']['ssid']
+
+        value = []
+
+        for c in activeConnection:
             value.append(dbus.Byte(c.encode()))
         return value
 class WiFiSSIDDescriptor(Descriptor):
