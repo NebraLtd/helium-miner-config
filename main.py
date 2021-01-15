@@ -437,7 +437,7 @@ class WiFiConnectCharacteristic(Characteristic):
         for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(10000, self.WiFiConnectCallback)
+        self.add_timeout(30000, self.WiFiConnectCallback)
 
     def StopNotify(self):
         self.notifying = False
@@ -456,14 +456,18 @@ class WiFiConnectCharacteristic(Characteristic):
         nmcli.device.wifi_connect(str(wiFiDetails.service), str(wiFiDetails.password))
 
 
+
     def checkWiFIStatus(self):
         #Check the current wi-fi connection status
-        pass
+        state = nmcli.device.show('wlan0')['GENERAL.STATE'].split(" ")[0]
+        print(state)
+        return True
 
 
     def ReadValue(self, options):
 
         logging.debug('Read WiFi Connect')
+        self.checkWiFIStatus()
 
         value = []
 
