@@ -471,7 +471,7 @@ class WiFiConnectCharacteristic(Characteristic):
 
     def checkWiFIStatus(self):
         #Check the current wi-fi connection status
-
+        pass
 
 
     def ReadValue(self, options):
