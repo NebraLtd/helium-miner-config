@@ -449,19 +449,8 @@ class WiFiConnectCharacteristic(Characteristic):
         wiFiDetails.ParseFromString(bytes(value))
         self.WiFiStatus = "connecting"
 
-        new_connection = {
-             '802-11-wireless': {'mode': 'infrastructure',
-                                 'security': '802-11-wireless-security',
-                                 'ssid': wiFiDetails.service},
-             '802-11-wireless-security': {'auth-alg': 'open', 'key-mgmt': 'wpa-psk', "psk": wiFiDetails.password},
-             'connection': {'id': 'Doge',
-                            'type': '802-11-wireless',
-                            'uuid': str(uuid.uuid4())},
-             'ipv4': {'method': 'auto'},
-             'ipv6': {'method': 'auto'}
-        }
+        nmcli.device.wifi_connect(wifiDetails.service, wifiDetails.password)
 
-        NetworkManager.Settings.AddConnection(example_connection)
 
     def checkWiFIStatus(self):
         #Check the current wi-fi connection status
