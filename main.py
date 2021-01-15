@@ -448,7 +448,8 @@ class WiFiConnectCharacteristic(Characteristic):
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(value))
         self.WiFiStatus = "connecting"
-
+        logging.debug(wifiDetails.service)
+        logging.debug(wifiDetails.password)
         nmcli.device.wifi_connect(wifiDetails.service, wifiDetails.password)
 
 
