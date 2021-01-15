@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import dbus, uuid, logging, sys
+import dbus, uuid, logging, sys, NetworkManager
 from pprint import pprint
 from time import sleep
 from advertisement import Advertisement
