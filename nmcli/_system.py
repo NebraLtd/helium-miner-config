@@ -30,7 +30,7 @@ class SystemCommand(SystemCommandInterface):
         commands = ['nmcli'] + parameters
         try:
             r = self._run(commands, capture_output=True,
-                          check=True
+                          check=True)
             return r.stdout.decode('utf-8')
         except CalledProcessError as e:
             rc = e.returncode
