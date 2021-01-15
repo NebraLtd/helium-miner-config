@@ -307,16 +307,14 @@ class WiFiSSIDCharacteristic(Characteristic):
     def ReadValue(self, options):
 
         logging.debug('Read WiFi SSID')
+        for network in nmcli.device.wifi():
+            if(network.ssid != "--"):
+                if(network.in_use):
+                    activeConnection = network.ssid
+                    break
 
-        activeConnection = ""
-        for conn in NetworkManager.NetworkManager.ActiveConnections:
-            settings = conn.Connection.GetSettings()
 
-            devices = ""
-            if conn.Devices:
-                for x in conn.Devices:
-                    if(x.Interface == "wlan0"):
-                        activeConnection = settings['802-11-wireless']['ssid']
+
 
         value = []
 
