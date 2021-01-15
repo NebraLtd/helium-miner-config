@@ -173,11 +173,9 @@ class WiFiServicesCharacteristic(Characteristic):
         logging.debug('Read WiFi Services')
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
-        for dev in NetworkManager.NetworkManager.GetDevices():
-            if dev.DeviceType != NetworkManager.NM_DEVICE_TYPE_WIFI:
-                continue
-            for ap in dev.GetAccessPoints():
-                wifiSsids.services.append(str(ap.Ssid))
+        for network in nmcli.device.wifi():
+            if(network.ssid != "--"):
+                wifiSsids.services.append(str(network.ssid))
         value = []
         val = wifiSsids.SerializeToString()
 
