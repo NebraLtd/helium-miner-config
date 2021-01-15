@@ -445,6 +445,8 @@ class WiFiConnectCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Connect')
+
+        logging.debug(value)
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(value))
         self.WiFiStatus = "connecting"
