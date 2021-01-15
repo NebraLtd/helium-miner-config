@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
-import dbus, uuid, NetworkManager, logging, sys
+import dbus, uuid, logging, sys
 from pprint import pprint
 from time import sleep
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import uuids
 import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
+import nmcli
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
@@ -468,6 +469,8 @@ class WiFiConnectCharacteristic(Characteristic):
 
         NetworkManager.Settings.AddConnection(example_connection)
 
+    def checkWiFIStatus(self):
+        #Check the current wi-fi connection status
 
 
 
