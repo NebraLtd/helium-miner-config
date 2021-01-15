@@ -460,7 +460,7 @@ class WiFiConnectCharacteristic(Characteristic):
     def checkWiFIStatus(self):
         #Check the current wi-fi connection status
         state = nmcli.device.show('wlan0')['GENERAL.STATE'].split(" ")[0]
-        print(state)
+        logging.debug(str(state))
         return True
 
 
