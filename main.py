@@ -310,11 +310,8 @@ class WiFiSSIDCharacteristic(Characteristic):
         for network in nmcli.device.wifi():
             if(network.ssid != "--"):
                 if(network.in_use):
-                    activeConnection = network.ssid
-                    break
-
-
-
+                    activeConnection = str(network.ssid)
+                    print(activeConnection)
 
         value = []
 
