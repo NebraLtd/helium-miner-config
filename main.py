@@ -307,6 +307,7 @@ class WiFiSSIDCharacteristic(Characteristic):
     def ReadValue(self, options):
 
         logging.debug('Read WiFi SSID')
+        activeConnection = ""
         for network in nmcli.device.wifi():
             if(network.ssid != "--"):
                 if(network.in_use):
