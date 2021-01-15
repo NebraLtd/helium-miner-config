@@ -316,7 +316,7 @@ class WiFiSSIDCharacteristic(Characteristic):
             devices = ""
             if conn.Devices:
                 for x in conn.Devices:
-                    if(x.Interface == "wlx7cdd908136ed"):
+                    if(x.Interface == "wlan0"):
                         activeConnection = settings['802-11-wireless']['ssid']
 
         value = []
@@ -453,6 +453,21 @@ class WiFiConnectCharacteristic(Characteristic):
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         wiFiDetails.ParseFromString(bytes(value))
         self.WiFiStatus = "connecting"
+
+        new_connection = {
+             '802-11-wireless': {'mode': 'infrastructure',
+                                 'security': '802-11-wireless-security',
+                                 'ssid': wiFiDetails.service},
+             '802-11-wireless-security': {'auth-alg': 'open', 'key-mgmt': 'wpa-psk', "psk": wiFiDetails.password},
+             'connection': {'id': 'Doge',
+                            'type': '802-11-wireless',
+                            'uuid': str(uuid.uuid4())},
+             'ipv4': {'method': 'auto'},
+             'ipv6': {'method': 'auto'}
+        }
+
+        NetworkManager.Settings.AddConnection(example_connection)
+
 
 
 
