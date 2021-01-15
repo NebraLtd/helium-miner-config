@@ -451,10 +451,9 @@ class WiFiConnectCharacteristic(Characteristic):
         logging.debug('PB2C')
         wiFiDetails.ParseFromString(bytes(value))
         logging.debug('PB2P')
-        #self.WiFiStatus = "connecting"
+        self.WiFiStatus = "connecting"
         logging.debug(str(wiFiDetails.service))
-        logging.debug(str(wiFiDetails.password))
-        nmcli.device.wifi_connect(wiFiDetails.service, wiFiDetails.password)
+        nmcli.device.wifi_connect(str(wiFiDetails.service), str(wiFiDetails.password))
 
 
     def checkWiFIStatus(self):
