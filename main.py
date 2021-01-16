@@ -219,9 +219,17 @@ class DiagnosticsCharacteristic(Characteristic):
         logging.debug('Diagnostics miner_object')
         miner_object = miner_bus.get_object('com.helium.Miner', '/')
         logging.debug('Diagnostics miner_interface')
-        miner_interface = dbus.Interface(p2pSatus, 'com.helium.Miner')
+        miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         logging.debug('Diagnostics p2pstatus')
-        self.p2pstatus = miner_interface.P2PStatus()
+        try:
+            self.p2pstatus = miner_interface.P2PStatus()
+        except:
+            self.p2pstatus = ""
+        try:
+            self.p2pstatus = miner_interface.P2PStatus()
+        except:
+            self.p2pstatus = ""
+
 
         value = []
 
