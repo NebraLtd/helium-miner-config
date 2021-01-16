@@ -515,12 +515,9 @@ class WiFiRemoveCharacteristic(Characteristic):
     def StopNotify(self):
         self.notifying = False
 
-
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Remove')
         logging.debug(value)
-
-
 
     def ReadValue(self, options):
 
