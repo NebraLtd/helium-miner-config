@@ -40,6 +40,7 @@ class ManufactureNameCharacteristic(Characteristic):
                 self, uuids.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
                 ["read"], service)
     def ReadValue(self, options):
+        logging.debug('Read Manufacturer')
         value = []
         val = "Nebra LTD."
         for c in val:
@@ -53,9 +54,10 @@ class FirmwareRevisionCharacteristic(Characteristic):
                 ["read"], service)
 
     def ReadValue(self, options):
+        logging.debug('Read Firmware')
         value = []
         #CHANGE THIS LINE FOR NEW VERSIONS
-        val = "2021.01.06.01"
+        val = "2021.01.16.01"
         for c in val:
             value.append(dbus.Byte(c.encode()))
 
@@ -69,6 +71,7 @@ class SerialNumberCharacteristic(Characteristic):
                 ["read"], service)
 
     def ReadValue(self, options):
+        logging.debug('Read Serial Number')
         value = []
         val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
 
