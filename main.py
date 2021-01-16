@@ -445,14 +445,16 @@ class WiFiConnectCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Connect')
-
-        logging.debug(value)
+        nmcli.device.disconnect('wlan0')
+        logging.debug('Disconnected From Wifi')
+        #logging.debug(value)
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
         logging.debug('PB2C')
         wiFiDetails.ParseFromString(bytes(value))
         logging.debug('PB2P')
-        self.WiFiStatus = "connecting"
+        self.WiFiStatus = "already"
         logging.debug(str(wiFiDetails.service))
+
         nmcli.device.wifi_connect(str(wiFiDetails.service), str(wiFiDetails.password))
         self.WiFiStatus = self.checkWiFIStatus()
 
