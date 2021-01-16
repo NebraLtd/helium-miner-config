@@ -408,7 +408,7 @@ class WiFiConnectCharacteristic(Characteristic):
         Characteristic.__init__(
                 self, uuids.WIFI_CONNECT_CHARACTERISTIC_UUID,
                 ["read", "write", "notify"], service)
-        self.add_descriptor(WiFiRemoveDescriptor(self))
+        self.add_descriptor(WiFiConnectDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
         self.WiFiStatus = ""
 
@@ -472,6 +472,21 @@ class WiFiConnectCharacteristic(Characteristic):
         value = []
 
         for c in self.WiFiStatus:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class WiFiConnectDescriptor(Descriptor):
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
+                ["read"],
+                characteristic)
+    def ReadValue(self, options):
+        value = []
+        desc = uuids.WIFI_CONNECT_KEY_VALUE
+
+        for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
 
