@@ -485,9 +485,9 @@ class WiFiRemoveCharacteristic(Characteristic):
         self.add_descriptor(WiFiRemoveDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
 
-    def WiFiConnectCallback(self):
+    def WiFiRemoveCallback(self):
         if self.notifying:
-            logging.debug('Callback WiFi Connect')
+            logging.debug('Callback WiFi Remove')
             value = []
             val = "False"
 
@@ -499,7 +499,7 @@ class WiFiRemoveCharacteristic(Characteristic):
 
     def StartNotify(self):
 
-        logging.debug('Notify WiFi Connect')
+        logging.debug('Notify WiFi Remove')
         if self.notifying:
             return
 
@@ -510,14 +510,15 @@ class WiFiRemoveCharacteristic(Characteristic):
         for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
-        self.add_timeout(30000, self.WiFiConnectCallback)
+        self.add_timeout(30000, self.WiFiRemoveCallback)
 
     def StopNotify(self):
         self.notifying = False
 
 
     def WriteValue(self, value, options):
-        logging.debug('Write WiFi Connect')
+        logging.debug('Write WiFi Remove')
+        logging.debug(value)
 
 
 
