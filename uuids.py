@@ -60,4 +60,10 @@ WIFI_CONNECT_KEY_VALUE = "WiFi Connect"
 ETHERNET_ONLINE_CHARACTERISTIC_UUID = "e5866bd6-0288-4476-98ca-ef7da6b4d289"
 ETHERNET_ONLINE_VALUE = "Ethernet Online"
 
-#
+#WiFi Codes
+wifiStatus = {
+    "100":"connected", #connected
+    "50": "already", #Already Connecting
+    "60": "invalid", # Invalid Key
+    "30": "failed"  # Connection Failed
+}
