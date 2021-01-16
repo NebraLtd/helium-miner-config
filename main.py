@@ -474,7 +474,64 @@ class WiFiConnectCharacteristic(Characteristic):
         for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         return value
-class WiFiConnectDescriptor(Descriptor):
+
+class WiFiRemoveCharacteristic(Characteristic):
+
+    def __init__(self, service):
+        self.notifying = False
+        Characteristic.__init__(
+                self, uuids.WIFI_REMOVE_CHARACTERISTIC_UUID,
+                ["read", "write", "notify"], service)
+        self.add_descriptor(WiFiRemoveDescriptor(self))
+        self.add_descriptor(opaqueStructure(self))
+
+    def WiFiConnectCallback(self):
+        if self.notifying:
+            logging.debug('Callback WiFi Connect')
+            value = []
+            val = "False"
+
+            for c in val:
+                value.append(dbus.Byte(c.encode()))
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+        return self.notifying
+
+    def StartNotify(self):
+
+        logging.debug('Notify WiFi Connect')
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        value = []
+
+        for c in self.WiFiStatus:
+            value.append(dbus.Byte(c.encode()))
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(30000, self.WiFiConnectCallback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+
+    def WriteValue(self, value, options):
+        logging.debug('Write WiFi Connect')
+
+
+
+    def ReadValue(self, options):
+
+        logging.debug('Read WiFi Renove')
+
+        value = []
+        val = "False"
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+class WiFiRemoveDescriptor(Descriptor):
 
     def __init__(self, characteristic):
         Descriptor.__init__(
@@ -483,7 +540,7 @@ class WiFiConnectDescriptor(Descriptor):
                 characteristic)
     def ReadValue(self, options):
         value = []
-        desc = uuids.WIFI_CONNECT_KEY_VALUE
+        desc = uuids.WIFI_REMOVE_VALUE
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
