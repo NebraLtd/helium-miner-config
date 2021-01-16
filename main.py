@@ -433,7 +433,7 @@ class WiFiConnectCharacteristic(Characteristic):
         self.notifying = True
 
         value = []
-
+        self.WiFiStatus = self.checkWiFIStatus()
         for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
@@ -454,6 +454,7 @@ class WiFiConnectCharacteristic(Characteristic):
         self.WiFiStatus = "connecting"
         logging.debug(str(wiFiDetails.service))
         nmcli.device.wifi_connect(str(wiFiDetails.service), str(wiFiDetails.password))
+        self.WiFiStatus = self.checkWiFIStatus()
 
 
 
@@ -467,7 +468,7 @@ class WiFiConnectCharacteristic(Characteristic):
     def ReadValue(self, options):
 
         logging.debug('Read WiFi Connect')
-        self.checkWiFIStatus()
+        self.WiFiStatus = self.checkWiFIStatus()
 
         value = []
 
