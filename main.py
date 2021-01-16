@@ -223,12 +223,16 @@ class DiagnosticsCharacteristic(Characteristic):
         logging.debug('Diagnostics p2pstatus')
         try:
             self.p2pstatus = miner_interface.P2PStatus()
+            logging.debug('Try 1 succeed')
         except:
             self.p2pstatus = ""
+            logging.debug('Try 1 fail')
         try:
+            logging.debug('Try 2 succeed')
             self.p2pstatus = miner_interface.P2PStatus()
         except:
             self.p2pstatus = ""
+            logging.debug('Try 2 fail')
 
 
         value = []
