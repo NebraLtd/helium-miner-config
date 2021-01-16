@@ -203,19 +203,29 @@ class WiFiServicesDescriptor(Descriptor):
 class DiagnosticsCharacteristic(Characteristic):
     #Returns proto of eth, wifi, fw, ip, p2pstatus
 
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.DIAGNOSTICS_CHARACTERISTIC_UUID,
                 ["read"], service)
         self.add_descriptor(DiagnosticsDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+        self.p2pstatus = ""
 
     def ReadValue(self, options):
         logging.debug('Read diagnostics')
+        logging.debug('Diagnostics miner_bus')
+        miner_bus = dbus.SystemBus()
+        logging.debug('Diagnostics miner_object')
+        miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        logging.debug('Diagnostics miner_interface')
+        miner_interface = dbus.Interface(p2pSatus, 'com.helium.Miner')
+        logging.debug('Diagnostics p2pstatus')
+        self.p2pstatus = miner_interface.P2PStatus()
+
         value = []
 
-        dbusInterface.P2PStatus()
-        val = ""
+        val = "moo"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
