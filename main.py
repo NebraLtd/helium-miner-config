@@ -470,9 +470,9 @@ class WiFiConnectCharacteristic(Characteristic):
             logging.debug('Disconnected From Wifi')
         #logging.debug(value)
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
-        logging.debug('PB2C')
+        #logging.debug('PB2C')
         wiFiDetails.ParseFromString(bytes(value))
-        logging.debug('PB2P')
+        #logging.debug('PB2P')
         self.WiFiStatus = "already"
         logging.debug(str(wiFiDetails.service))
 
