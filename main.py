@@ -691,5 +691,5 @@ try:
     app.run()
 except KeyboardInterrupt:
     app.quit()
-except  Exception as e:
+except Exception as e:
     print(e)
