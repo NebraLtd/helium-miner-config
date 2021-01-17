@@ -12,6 +12,7 @@ import nmcli
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
+
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
@@ -55,9 +56,20 @@ class FirmwareRevisionCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logging.debug('Read Firmware')
+
+        val = "2021.01.17.01"
+
+        supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
+        supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
+        supervisorAddress = "%s/v2/applications/state?apikey=%s" % (supervisorAddress, supervisorKey)
+        with urllib.request.urlopen(supervisorAddress) as url:
+            data = json.loads(url.read().decode())
+            if(data[list(data)[0]]['services']['gateway-config']['status'] != "Running" or data[list(data)[0]]['services']['helium-miner']['status'] != "Running"):
+                val = "2000.01.01.01"
+
         value = []
         #CHANGE THIS LINE FOR NEW VERSIONS
-        val = "2021.01.16.01"
+
         for c in val:
             value.append(dbus.Byte(c.encode()))
 
