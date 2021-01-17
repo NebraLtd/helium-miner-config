@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import dbus, uuid, logging, sys, NetworkManager, urllib.request, json, nmcli, uuids
+import dbus, uuid, logging, sys, NetworkManager, urllib.request, json, nmcli, uuids, os
 from pprint import pprint
 from time import sleep
 from advertisement import Advertisement
