@@ -408,7 +408,7 @@ class AddGatewayCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.ADD_GATEWAY_CHARACTERISTIC_UUID,
-                ["read"], service)
+                ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
 
