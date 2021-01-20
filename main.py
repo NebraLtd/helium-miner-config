@@ -412,6 +412,45 @@ class AddGatewayCharacteristic(Characteristic):
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
 
+    def AddGatewayCallback(self):
+        if self.notifying:
+            logging.debug('Callback Add Gateway')
+            value = []
+            val = ""
+
+            for c in val:
+                value.append(dbus.Byte(c.encode()))
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+    def StartNotify(self):
+
+        logging.debug('Notify Add Gateway')
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        value = []
+        val = ""
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.add_timeout(30000, self.AddGatewayCallback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+
+    def WriteValue(self, value, options):
+        logging.debug('Write  Add Gateway')
+        logging.debug(value)
+        addGatewayDetails = add_gateway_pb2.add_gateway_v1()
+        logging.debug('PB2C')
+        addGatewayDetails.ParseFromString(bytes(value))
+        logging.debug('PB2P')
+        logging.debug(str(addGatewayDetails))
+
+
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
         value = []
