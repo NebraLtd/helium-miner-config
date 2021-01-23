@@ -460,7 +460,7 @@ class AddGatewayCharacteristic(Characteristic):
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         sleep(0.05)
         addMinerRequest = miner_interface.AddGateway(addGatewayDetails.owner,
-        addGatewayDetails.amount,addGatewayDetails.fee,addGatewayDetails.payer)
+        addGatewayDetails.fee,addGatewayDetails.amount,addGatewayDetails.payer)
         logging.debug(addMinerRequest)
         self.notifyValue = addMinerRequest
 
