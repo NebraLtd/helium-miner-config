@@ -410,7 +410,7 @@ class AddGatewayCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
-
+        self.notifyValue = "init"
     def AddGatewayCallback(self):
         if self.notifying:
             logging.debug('Callback Add Gateway')
@@ -448,14 +448,23 @@ class AddGatewayCharacteristic(Characteristic):
         addGatewayDetails.ParseFromString(bytes(value))
         logging.debug('PB2P')
         logging.debug(str(addGatewayDetails))
+        miner_bus = dbus.SystemBus()
+        miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        sleep(0.05)
+        miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
+        sleep(0.05)
+        addMinerRequest = miner_interface.AddGateway(addGatewayDetails["owner"],
+        addGatewayDetails["amount"],addGatewayDetails["fee"],addGatewayDetails["payer"])
+        logging.debug(addMinerRequest)
+        #self.notifyValue = addMinerRequest
+
 
 
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
         value = []
-        val = ""
 
-        for c in val:
+        for c in self.notifyValue:
             value.append(dbus.Byte(c.encode()))
         return value
 
