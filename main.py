@@ -417,7 +417,10 @@ class AddGatewayCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
-        self.notifyValue = "init"
+        self.notifyValue = []
+        for c in "init":
+            self.notifyValue.append(dbus.Byte(c.encode()))
+
     def AddGatewayCallback(self):
         if self.notifying:
             logging.debug('Callback Add Gateway')
@@ -436,11 +439,7 @@ class AddGatewayCharacteristic(Characteristic):
 
         self.notifying = True
 
-        value = []
-        val = ""
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
         self.add_timeout(30000, self.AddGatewayCallback)
 
     def StopNotify(self):
@@ -463,17 +462,12 @@ class AddGatewayCharacteristic(Characteristic):
         addMinerRequest = miner_interface.AddGateway(addGatewayDetails.owner,
         addGatewayDetails.amount,addGatewayDetails.fee,addGatewayDetails.payer)
         logging.debug(addMinerRequest)
-        #self.notifyValue = addMinerRequest
-
-
+        self.notifyValue = addMinerRequest
 
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
-        value = []
 
-        for c in self.notifyValue:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        return self.notifyValue
 
 class AddGatewayDescriptor(Descriptor):
 
