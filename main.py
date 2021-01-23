@@ -15,6 +15,13 @@ GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
+#Public Onboarding Keys
+public_keys_file = open("/var/data/public_keys").readline().split('"')
+pubKey = str(public_keys_file[1])
+onboardingKey = str(public_keys_file[3])
+animalName = str(public_keys_file[5])
+
+
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -122,7 +129,7 @@ class OnboardingKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Onboarding Key')
         value = []
-        val = "11TqqVzycXK5k49bXbmcUcSne91krq7v3VSQCfDXr" #PLACEHOLDER
+        val = onboardingKey;
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -155,7 +162,7 @@ class PublicKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Public Key')
         value = []
-        val = "117ei8D1Bk2kYqWNjSFuLgg3BrtTNSTi2tt14LRUFgt" #PLACEHOLDER
+        val = pubKey;
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
