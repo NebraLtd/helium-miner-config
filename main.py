@@ -200,6 +200,7 @@ class WiFiServicesCharacteristic(Characteristic):
         for network in nmcli.device.wifi():
             if(network.ssid != "--"):
                 wifiSsids.services.append(str(network.ssid))
+                logging.debug(str(network.ssid))
         value = []
         val = wifiSsids.SerializeToString()
 
