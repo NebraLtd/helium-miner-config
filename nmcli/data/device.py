@@ -22,6 +22,7 @@ class Device:
 
     @classmethod
     def parse(cls, text: str) -> Device:
+        print(text)
         m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
         print(m)
         if m:
