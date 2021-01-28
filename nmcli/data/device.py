@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import re
 from typing import Dict, Optional
+from pprint import pprint
 
 DeviceDetails = Dict[str, Optional[str]]
 
@@ -22,9 +23,9 @@ class Device:
 
     @classmethod
     def parse(cls, text: str) -> Device:
-        print(text)
+        pprint(text)
         m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
-        print(m)
+        pprint(m)
         if m:
             device, device_type, state, conn = m.groups()
             conn = conn.strip()
