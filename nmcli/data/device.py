@@ -23,6 +23,7 @@ class Device:
     @classmethod
     def parse(cls, text: str) -> Device:
         m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
+        print(m)
         if m:
             device, device_type, state, conn = m.groups()
             conn = conn.strip()

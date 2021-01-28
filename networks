@@ -1,0 +1,18 @@
+IN-USE  SSID            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY
+        SilverSurfers   Infra  3     195 Mbit/s  100     ****  WPA2
+        --              Infra  3     65 Mbit/s   100     ****  WPA2
+        VM0140260       Infra  1     130 Mbit/s  59      ***   WPA1 WPA2
+        EE-6emkj2       Infra  1     130 Mbit/s  55      **    WPA1 WPA2
+        FRITZ!Box 3490  Infra  1     195 Mbit/s  49      **    WPA2
+        Virgin Media    Infra  11    130 Mbit/s  42      **    WPA2 802.1X
+        VM5109126       Infra  6     130 Mbit/s  39      **    WPA1 WPA2
+        Virgin Media    Infra  6     130 Mbit/s  39      **    WPA2 802.1X
+        --              Infra  11    130 Mbit/s  39      **    WPA2
+        BT-PWA2M3       Infra  11    195 Mbit/s  35      **    WPA2
+        BTWi-fi         Infra  11    195 Mbit/s  35      **    --
+        VM9774787       Infra  6     130 Mbit/s  32      **    WPA1 WPA2
+        SKYE7DPE        Infra  6     130 Mbit/s  32      **    WPA2
+        SKYF6AB1        Infra  6     130 Mbit/s  32      **    WPA2
+        SKYE7DPE        Infra  11    260 Mbit/s  32      **    WPA2
+        PLUSNET-QM9Q7X  Infra  1     130 Mbit/s  29      *     WPA2
+        vodafone0905F3  Infra  11    195 Mbit/s  29      *     WPA2  
