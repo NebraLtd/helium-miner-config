@@ -70,7 +70,7 @@ class FirmwareRevisionCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Firmware')
 
-        val = "2021.01.17.01"
+        val = uuids.FIRMWARE_VERSION
 
         supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
         supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
