@@ -8,6 +8,9 @@ from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
 
+#Disable sudo for nmcli
+nmcli.disable_use_sudo()
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(25,GPIO.OUT)
 GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
