@@ -2,7 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 import re
 from typing import Dict, Optional
-from pprint import pprint
 
 DeviceDetails = Dict[str, Optional[str]]
 
@@ -23,9 +22,7 @@ class Device:
 
     @classmethod
     def parse(cls, text: str) -> Device:
-        pprint(text)
         m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
-        pprint(m)
         if m:
             device, device_type, state, conn = m.groups()
             conn = conn.strip()
@@ -58,7 +55,17 @@ class DeviceWifi:
     @classmethod
     def parse(cls, text: str) -> DeviceWifi:
         m = re.search(
-            r'^(\*|\s)\s+(\S*)\s+(\S*)\s+(\d+)\s+(\d+)\sMbit/s\s+(\d+)\s+\S+\s+(.*)$', text)
+            r'^(\*|\s)\s*(\S*|\S+\s[\S]+|\S+\s[\S]+\s[\S]+)\s+(\S*)\s+(\d+)\s+(\d+)\sMbit/s\s+(\d+)\s+\S+\s+(.*)$', text)
+        if m:
+            in_use, ssid, mode, chan, rate, signal, security = m.groups()
+            return DeviceWifi(in_use == '*', ssid, mode,
+                    int(chan), int(rate), int(signal), security.rstrip())
+        raise ValueError('Parse failed [%s]' % text)
+
+    @classmethod
+    def parse_include_bssid_line(cls, text: str) -> DeviceWifi:
+        m = re.search(
+            r'^(\*|\s)\s+\S*\s+(\S*)\s+(\S*)\s+(\d+)\s+(\d+)\sMbit/s\s+(\d+)\s+\S+\s+(.*)$', text)
         if m:
             in_use, ssid, mode, chan, rate, signal, security = m.groups()
             return DeviceWifi(in_use == '*', ssid, mode,

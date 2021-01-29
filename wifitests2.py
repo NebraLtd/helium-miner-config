@@ -1,25 +1,23 @@
 import re
-import Optional
-class Device:
-    device: str
-    device_type: str
-    state: str
-    connection: Optional[str]
 
-    def to_json(self):
-        return {
-            'device': self.device,
-            'device_type': self.device_type,
-            'state': self.state,
-            'connection': self.connection
-        }
+text = "        SilverSurfers   Infra  3     195 Mbit/s  100     ****  WPA2    "
 
-    @classmethod
-    def parse(cls, text: str) -> Device:
-        m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
-        if m:
-            device, device_type, state, conn = m.groups()
-            conn = conn.strip()
-            connection = conn if conn != '--' else None
-            return Device(device, device_type, state, connection)
-        raise ValueError('Parse failed [%s]' % text)
+m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
+print(m)
+if m:
+    device, device_type, state, conn = m.groups()
+    conn = conn.strip()
+    connection = conn if conn != '--' else None
+    print(connection)
+
+#text = "        Virgin Media    Infra  6     130 Mbit/s  39      **    WPA2 802.1X "
+
+text = "        Virgin Media                    Infra  1     130 Mbit/s  59      ▂▄▆_  WPA2 802.1X "
+
+m = re.search(r'^(\S*)\s+(\S*)\s+(\S*)\s+([\S\s]+)\s*$', text)
+print(m)
+if m:
+    device, device_type, state, conn = m.groups()
+    conn = conn.strip()
+    connection = conn if conn != '--' else None
+    print(connection)
