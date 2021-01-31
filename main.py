@@ -34,7 +34,7 @@ class ConfigAdvertisement(Advertisement):
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         variant = os.getenv('VARIANT')
-        macAddr = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-6:].upper()
+        macAddr = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-4:].upper()
         localName = "Nebra %s Hotspot %s" % (variant, macAddr)
         self.add_local_name(localName)
         self.include_tx_power = True
