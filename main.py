@@ -387,18 +387,61 @@ class AssertLocationCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.ASSERT_LOCATION_CHARACTERISTIC_UUID,
-                ["read"], service)
+                ["read", "write", "notify"], service)
         self.add_descriptor(AssertLocationDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
+        self.notifyValue = []
+        for c in "init":
+            self.notifyValue.append(dbus.Byte(c.encode()))
+
+    def AddGatewayCallback(self):
+        if self.notifying:
+            logging.debug('Callback Assert Location')
+            value = []
+            val = ""
+
+            for c in val:
+                value.append(dbus.Byte(c.encode()))
+            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": value}, [])
+
+    def StartNotify(self):
+
+        logging.debug('Notify Assert Location')
+        if self.notifying:
+            return
+
+        self.notifying = True
+
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
+        self.add_timeout(30000, self.AddGatewayCallback)
+
+    def StopNotify(self):
+        self.notifying = False
+
+
+    def WriteValue(self, value, options):
+        logging.debug('Write Assert Location')
+        logging.debug(value)
+        assertLocationDetails = assert_location_pb2.assert_loc_v1()
+        logging.debug('PB2C')
+        assertLocationDetails.ParseFromString(bytes(value))
+        logging.debug('PB2P')
+        logging.debug(str(assertLocationDetails))
+        #miner_bus = dbus.SystemBus()
+        #miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        #sleep(0.05)
+        #miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
+        #sleep(0.05)
+        #addMinerRequest = miner_interface.AddGateway(addGatewayDetails.owner,
+        #addGatewayDetails.fee,addGatewayDetails.amount,addGatewayDetails.payer)
+        #logging.debug(addMinerRequest)
+        #self.notifyValue = addMinerRequest
 
     def ReadValue(self, options):
         logging.debug('Read Assert Location')
-        value = []
-        val = "F04CD555B5D9"
 
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
+        return self.notifyValue
+
 class AssertLocationDescriptor(Descriptor):
 
     def __init__(self, characteristic):
