@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-import dbus, uuid, logging, sys, NetworkManager, urllib.request, json, nmcli, uuids, os
+import dbus, uuid, logging, sys, NetworkManager, urllib.request
+import json, nmcli, uuids, os, h3
 from pprint import pprint
 from time import sleep
 from RPi import GPIO
@@ -427,15 +428,17 @@ class AssertLocationCharacteristic(Characteristic):
         assertLocationDetails.ParseFromString(bytes(value))
         logging.debug('PB2P')
         logging.debug(str(assertLocationDetails))
-        #miner_bus = dbus.SystemBus()
-        #miner_object = miner_bus.get_object('com.helium.Miner', '/')
-        #sleep(0.05)
-        #miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
-        #sleep(0.05)
-        #addMinerRequest = miner_interface.AddGateway(addGatewayDetails.owner,
-        #addGatewayDetails.fee,addGatewayDetails.amount,addGatewayDetails.payer)
-        #logging.debug(addMinerRequest)
-        #self.notifyValue = addMinerRequest
+        miner_bus = dbus.SystemBus()
+        miner_object = miner_bus.get_object('com.helium.Miner', '/')
+        sleep(0.05)
+        miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
+        sleep(0.05)
+        h3String = h3.geo_to_h3(assertLocationDetails.lat, assertLocationDetails.lon, 12)
+        logging.debug(h3String)
+        # H3String, Owner, Nonce, Amount, Fee, Paye
+        minerAssertRequest = miner_interface.AssertLocation()
+        logging.debug(minerAssertRequest)
+        self.notifyValue = minerAssertRequest
 
     def ReadValue(self, options):
         logging.debug('Read Assert Location')
