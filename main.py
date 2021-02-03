@@ -436,7 +436,7 @@ class AssertLocationCharacteristic(Characteristic):
         h3String = h3.geo_to_h3(assLocDet.lat, assLocDet.lon, 12)
         logging.debug(h3String)
         # H3String, Owner, Nonce, Amount, Fee, Paye
-        minerAssertRequest = miner_interface.AssertLocation(h3string,
+        minerAssertRequest = miner_interface.AssertLocation(h3String,
         assLocDet.owner, assLocDet.nonce, assLocDet.amount, assLocDet.fee,
         assLocDet.payer)
         logging.debug(assLocDet)
