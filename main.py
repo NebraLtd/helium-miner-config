@@ -423,21 +423,23 @@ class AssertLocationCharacteristic(Characteristic):
     def WriteValue(self, value, options):
         logging.debug('Write Assert Location')
         logging.debug(value)
-        assertLocationDetails = assert_location_pb2.assert_loc_v1()
+        assLocDet = assert_location_pb2.assert_loc_v1()
         logging.debug('PB2C')
-        assertLocationDetails.ParseFromString(bytes(value))
+        assLocDet.ParseFromString(bytes(value))
         logging.debug('PB2P')
-        logging.debug(str(assertLocationDetails))
+        logging.debug(str(assLocDet))
         miner_bus = dbus.SystemBus()
         miner_object = miner_bus.get_object('com.helium.Miner', '/')
         sleep(0.05)
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         sleep(0.05)
-        h3String = h3.geo_to_h3(assertLocationDetails.lat, assertLocationDetails.lon, 12)
+        h3String = h3.geo_to_h3(assLocDet.lat, assLocDet.lon, 12)
         logging.debug(h3String)
         # H3String, Owner, Nonce, Amount, Fee, Paye
-        minerAssertRequest = miner_interface.AssertLocation()
-        logging.debug(minerAssertRequest)
+        minerAssertRequest = miner_interface.AssertLocation(h3string,
+        assLocDet.owner, assLocDet.nonce, assLocDet.amount, assLocDet.fee,
+        assLocDet.payer)
+        logging.debug(assLocDet)
         self.notifyValue = minerAssertRequest
 
     def ReadValue(self, options):
