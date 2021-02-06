@@ -792,5 +792,6 @@ try:
     app.run()
 except KeyboardInterrupt:
     app.quit()
+    GPIO.cleanup()
 except Exception as e:
     print(e)
