@@ -795,3 +795,4 @@ except KeyboardInterrupt:
     GPIO.cleanup()
 except Exception as e:
     print(e)
+    GPIO.cleanup()
