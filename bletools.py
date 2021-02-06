@@ -1,3 +1,5 @@
+# flake8: noqa
+
 """Copyright (c) 2019, Douglas Otwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
