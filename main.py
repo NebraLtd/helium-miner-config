@@ -271,6 +271,48 @@ class WiFiServicesDescriptor(Descriptor):
         return value
 
 
+class WiFiConfiguredServicesCharacteristic(Characteristic):
+
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, uuids.WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID,
+                ["read"], service)
+        self.add_descriptor(WiFiConfiguredServicesDescriptor(self))
+        self.add_descriptor(opaqueStructure(self))
+
+    def ReadValue(self, options):
+        logging.debug('Read WiFi CONFIGURED Services')
+        # wifiSsids = wifi_services_pb2.wifi_services_v1()
+
+        # for network in nmcli.device.wifi():
+        #    if(network.ssid != "--"):
+        #        wifiSsids.services.append(str(network.ssid))
+        #        logging.debug(str(network.ssid))
+        value = []
+        val = "RTK"
+
+        for c in val:
+            value.append(dbus.Byte(c))
+        return value
+
+
+class WiFiConfiguredServicesDescriptor(Descriptor):
+
+    def __init__(self, characteristic):
+        Descriptor.__init__(
+                self, uuids.USER_DESC_DESCRIPTOR_UUID,
+                ["read"],
+                characteristic)
+
+    def ReadValue(self, options):
+        value = []
+        desc = uuids.WIFI_CONFIGURED_SERVICES_VALUE
+
+        for c in desc:
+            value.append(dbus.Byte(c.encode()))
+        return value
+
+
 class DiagnosticsCharacteristic(Characteristic):
     # Returns proto of eth, wifi, fw, ip, p2pstatus
 
