@@ -793,7 +793,14 @@ statusLed = LED(25)
 
 def ledThreadCode():
     logging.debug("LED Thread Started")
+    diagnosticsStatus = False
     global advertisementLED
+    try:
+        diagnosticsJsonFile = open("/var/data/nebraDiagnostics.json")
+        diagnosticsJsonFile = json.load(diagnosticsJsonFile)
+        print(diagnosticsJsonFile)
+    except FileNotFoundError:
+        diagnosticsStatus = False
     while True:
         statusLed.off()
         if(advertisementLED is True):
