@@ -815,18 +815,26 @@ def ledThreadCode():
             sleep(2)
         print(str(advertisementLED))
 
+advertise = False
+
+def startAdvert():
+    global advertise
+    advertise = True
+    logging.debug("Button press advertise queued")
 
 def advertisementThreadCode():
+    global advertise
     logging.debug("Advertising Thread Started")
-    global advertisementLED
-    if(advertisementLED is False):
+    while True:
+        if(advertise is True):
+        advertise = False
         adv.register()
         advertisementLED = True
         sleep(60)
         adv.unregister()
         advertisementLED = False
-    else:
-        logging.debug("Already Advertising")
+
+
 
 count = 0
 
@@ -834,7 +842,7 @@ appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
 
-userButton.when_held = advertisementThread.start
+userButton.when_held = startAdvert
 
 
 # Main Loop Starts Here
