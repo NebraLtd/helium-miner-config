@@ -792,6 +792,7 @@ count = 0
 try:
     # app.run()
     appThread = threading.Thread(target=app.run())
+    appThread.setDaemon(True)
     appThread.start()
     while True:
         print("Tick %s" % (count))
