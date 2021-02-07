@@ -122,6 +122,7 @@ class FirmwareRevisionCharacteristic(Characteristic):
 
         return value
 
+
 class SerialNumberCharacteristic(Characteristic):
 
     def __init__(self, service):
@@ -138,6 +139,7 @@ class SerialNumberCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class HeliumService(Service):
     DEVINFO_SVC_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
@@ -157,6 +159,7 @@ class HeliumService(Service):
         self.add_characteristic(WiFiConnectCharacteristic(self))
         self.add_characteristic(EthernetOnlineCharacteristic(self))
 
+
 class OnboardingKeyCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
@@ -174,6 +177,7 @@ class OnboardingKeyCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class OnboardingKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -188,6 +192,7 @@ class OnboardingKeyDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class PublicKeyCharacteristic(Characteristic):
 
@@ -207,6 +212,7 @@ class PublicKeyCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class PublicKeyDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -221,6 +227,7 @@ class PublicKeyDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class WiFiServicesCharacteristic(Characteristic):
 
@@ -246,6 +253,8 @@ class WiFiServicesCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c))
         return value
+
+
 class WiFiServicesDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -261,6 +270,7 @@ class WiFiServicesDescriptor(Descriptor):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class DiagnosticsCharacteristic(Characteristic):
     #Returns proto of eth, wifi, fw, ip, p2pstatus
 
@@ -272,6 +282,7 @@ class DiagnosticsCharacteristic(Characteristic):
         self.add_descriptor(DiagnosticsDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
         self.p2pstatus = ""
+
 
     def ReadValue(self, options):
         logging.debug('Read diagnostics')
@@ -298,6 +309,8 @@ class DiagnosticsCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
+
 class DiagnosticsDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -311,6 +324,7 @@ class DiagnosticsDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class MacAddressCharacteristic(Characteristic):
 
@@ -329,6 +343,8 @@ class MacAddressCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
+
 class MacAddressDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -343,6 +359,7 @@ class MacAddressDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class LightsCharacteristic(Characteristic):
 
@@ -361,6 +378,8 @@ class LightsCharacteristic(Characteristic):
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
+
 class LightsDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -375,6 +394,7 @@ class LightsDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class WiFiSSIDCharacteristic(Characteristic):
 
@@ -400,6 +420,8 @@ class WiFiSSIDCharacteristic(Characteristic):
         for c in activeConnection:
             value.append(dbus.Byte(c.encode()))
         return value
+
+        
 class WiFiSSIDDescriptor(Descriptor):
 
     def __init__(self, characteristic):
