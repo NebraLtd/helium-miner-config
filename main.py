@@ -800,6 +800,7 @@ def ledThreadCode():
         else:
             statusLed.on()
         logging.debug("LED Thread Tick")
+        print(str(advertisementLED))
         sleep(1)
 
 
