@@ -132,7 +132,8 @@ class SerialNumberCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Serial Number')
         value = []
-        val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
+        val = open("/sys/class/net/eth0/address").readline() \
+            .strip().replace(":", "")
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
