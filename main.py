@@ -60,11 +60,12 @@ class ConfigAdvertisement(Advertisement):
         Advertisement.__init__(self, index, "peripheral")
         variant = os.getenv('VARIANT')
         macAddr = open("/sys/class/net/eth0/address").readline()\
-            .strip().replace(":","")[-6:].upper()
+            .strip().replace(":", "")[-6:].upper()
         localName = "Nebra %s Hotspot %s" % (variant, macAddr)
         self.add_local_name(localName)
         self.include_tx_power = True
         self.service_uuids = ["0fda92b2-44a2-4af2-84f5-fa682baa2b8d"]
+
 
 class DeviceInformationService(Service):
     # Service that provides basic information
@@ -74,11 +75,13 @@ class DeviceInformationService(Service):
         self.add_characteristic(FirmwareRevisionCharacteristic(self))
         self.add_characteristic(SerialNumberCharacteristic(self))
 
+
 class ManufactureNameCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.MANUFACTURE_NAME_CHARACTERISTIC_UUID,
                 ["read"], service)
+
     def ReadValue(self, options):
         logging.debug('Read Manufacturer')
         value = []
@@ -100,10 +103,12 @@ class FirmwareRevisionCharacteristic(Characteristic):
 
         supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
         supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
-        supervisorAddress = "%s/v2/applications/state?apikey=%s" % (supervisorAddress, supervisorKey)
+        supervisorAddress = "%s/v2/applications/state?apikey=%s" % \
+            (supervisorAddress, supervisorKey)
         with urllib.request.urlopen(supervisorAddress) as url:
             data = json.loads(url.read().decode())
-            if(data[list(data)[0]]['services']['gateway-config']['status'] != "Running" or data[list(data)[0]]['services']['helium-miner']['status'] != "Running"):
+            if(data[list(data)[0]]['services']['gateway-config']['status'] \
+                != "Running" or data[list(data)[0]]['services']['helium-miner']['status'] != "Running"):
                 val = "2000.01.01.01"
 
         value = []
