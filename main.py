@@ -831,7 +831,7 @@ def advertisementThreadCode():
             advertise = False
             adv.register()
             advertisementLED = True
-            sleep(60)
+            sleep(600)
             adv.unregister()
             advertisementLED = False
 
