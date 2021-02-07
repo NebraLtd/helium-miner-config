@@ -26,9 +26,9 @@ from service import Application, Service, Characteristic, Descriptor
 # Protobuf Imports
 import add_gateway_pb2
 import assert_location_pb2
-import diagnostics_pb2
+# import diagnostics_pb2
 import wifi_connect_pb2
-import wifi_remove_pb2
+# import wifi_remove_pb2
 import wifi_services_pb2
 
 from gpiozero import Button, LED
