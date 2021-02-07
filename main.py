@@ -824,7 +824,7 @@ def startAdvert():
 
 def advertisementThreadCode():
     global advertise
-    global advertismentLED
+    global advertisementLED
     logging.debug("Advertising Thread Started")
     while True:
         if(advertise is True):
