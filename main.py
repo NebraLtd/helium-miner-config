@@ -109,13 +109,12 @@ class FirmwareRevisionCharacteristic(Characteristic):
         with urllib.request.urlopen(supervisorAddress) as url:
             data = json.loads(url.read().decode())
             if(data[list(data)[0]]['services']['gateway-config']['status']
-                != "Running" or
-                data[list(data)[0]]['services']['helium-miner']['status']
-                != "Running"):
+                    != "Running" or
+                    data[list(data)[0]]['services']['helium-miner']['status']
+                    != "Running"):
                 val = "2000.01.01.01"
 
         value = []
-        #CHANGE THIS LINE FOR NEW VERSIONS
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -171,7 +170,7 @@ class OnboardingKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Onboarding Key')
         value = []
-        val = onboardingKey;
+        val = onboardingKey
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -185,6 +184,7 @@ class OnboardingKeyDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.ONBOARDING_KEY_VALUE
@@ -220,6 +220,7 @@ class PublicKeyDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.PUBLIC_KEY_VALUE
@@ -262,6 +263,7 @@ class WiFiServicesDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.WIFI_SERVICES_VALUE
@@ -318,6 +320,7 @@ class DiagnosticsDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.DIAGNOSTICS_VALUE
@@ -352,6 +355,7 @@ class MacAddressDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.MAC_ADDRESS_VALUE
@@ -387,6 +391,7 @@ class LightsDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.LIGHTS_VALUE
@@ -421,7 +426,7 @@ class WiFiSSIDCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
-        
+
 class WiFiSSIDDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -585,6 +590,7 @@ class AddGatewayDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.ADD_GATEWAY_KEY_VALUE
@@ -679,6 +685,7 @@ class WiFiConnectDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.WIFI_CONNECT_KEY_VALUE
@@ -748,6 +755,7 @@ class WiFiRemoveDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.WIFI_REMOVE_VALUE
@@ -787,6 +795,7 @@ class EthernetOnlineDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+                
     def ReadValue(self, options):
         value = []
         desc = uuids.ETHERNET_ONLINE_VALUE
