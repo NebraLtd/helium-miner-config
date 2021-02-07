@@ -799,7 +799,7 @@ def ledThreadCode():
         diagnosticsJsonFile = open("/var/data/nebraDiagnostics.json")
         diagnosticsJsonFile = json.load(diagnosticsJsonFile)
         if(diagnosticsJsonFile['PF'] is True):
-            diagnosticsStatus = True
+            diagnosticsStatus = False
         else:
             diagnosticsStatus = False
     except FileNotFoundError:
