@@ -785,13 +785,21 @@ app.add_service(DeviceInformationService(0))
 app.add_service(HeliumService(1))
 app.register()
 
-
 adv = ConfigAdvertisement(0)
 
+#Setup GPIO Devices
+userButton = Button(26, hold_time=10)
+statusLed = LED(25)
+
 def ledThreadCode():
+    logging.debug("LED Thread Started")
+    global advertisementLED
     while True:
-        print("LED thread working")
-        sleep(1)
+        if(advertisementLED is True):
+            statusLed.blink(1,1)
+        else:
+            statusLed.on()
+
 
 def advertisementThreadCode():
     logging.debug("Advertising Thread Started")
@@ -805,7 +813,6 @@ def advertisementThreadCode():
     else:
         logging.debug("Already Advertising")
 
-userButton = Button(26, hold_time=10)
 userButton.when_held = advertisementThread.start
 
 count = 0
