@@ -791,7 +791,8 @@ adv.register()
 count = 0
 try:
     # app.run()
-    threading.Thread(target=app.run())
+    appThread = threading.Thread(target=app.run())
+    appThread.start()
     while True:
         print("Tick %s" % (count))
         count += 1
