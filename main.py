@@ -1,14 +1,35 @@
 #!/usr/bin/python3
 
-import dbus, uuid, logging, sys, NetworkManager, urllib.request
-import json, nmcli, uuids, os, h3
+# Main imports
+import dbus
+import uuid
+import logging
+import sys
+import  NetworkManager
+import urllib.request
+import json
+import nmcli
+import uuids
+import os
+import h3
+import threading
+
+# From imports
 from pprint import pprint
 from time import sleep
 from RPi import GPIO
+
+# BLE Library
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
-import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
-import threading
+
+# Protobuf Imports
+import add_gateway_pb2
+import assert_location_pb2
+import diagnostics_pb2
+import wifi_connect_pb2
+import wifi_remove_pb2
+import wifi_services_pb2
 
 from gpiozero import Button, LED
 
