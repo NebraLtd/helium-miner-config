@@ -785,26 +785,29 @@ app.register()
 
 
 adv = ConfigAdvertisement(0)
-adv.register()
 
-def testy():
+def ledThreadCode():
     while True:
-        print("Test thread working")
+        print("LED thread working")
         sleep(1)
+
+def buttonThreadCode():
+    while True:
+        print("Button thread working")
+        sleep(1)
+
 
 count = 0
 try:
     print("Starting %s" % (count))
     # app.run()
     appThread = threading.Thread(target=app.run)
-    testThread = threading.Thread(target=testy)
+    ledThread = threading.Thread(target=ledThreadCode)
+    buttonThread = threading.Thread(target=buttonThreadCode)
     appThread.daemon = True
     appThread.start()
-    testThread.start()
-    while True:
-        print("Tick %s" % (count))
-        count += 1
-        sleep(1)
+    ledThread.start()
+    buttonThread.start()
 except KeyboardInterrupt:
     app.quit()
     GPIO.cleanup()
