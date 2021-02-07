@@ -798,11 +798,9 @@ def ledThreadCode():
         statusLed.off()
         if(advertisementLED is True):
             statusLed.blink(1, 1, 1, False)
-            logging.debug("LED Slow blink")
         else:
             statusLed.on()
-            sleep(1)
-            logging.debug("Solid LED")
+            sleep(2)
         print(str(advertisementLED))
 
 
