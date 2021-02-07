@@ -206,8 +206,7 @@ class PublicKeyCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Public Key')
         value = []
-        val = pubKey;
-
+        val = pubKey
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
@@ -238,7 +237,6 @@ class WiFiServicesCharacteristic(Characteristic):
                 ["read"], service)
         self.add_descriptor(WiFiServicesDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
-
 
     def ReadValue(self, options):
         logging.debug('Read WiFi Services')
@@ -274,8 +272,7 @@ class WiFiServicesDescriptor(Descriptor):
 
 
 class DiagnosticsCharacteristic(Characteristic):
-    #Returns proto of eth, wifi, fw, ip, p2pstatus
-
+    # Returns proto of eth, wifi, fw, ip, p2pstatus
 
     def __init__(self, service):
         Characteristic.__init__(
@@ -284,7 +281,6 @@ class DiagnosticsCharacteristic(Characteristic):
         self.add_descriptor(DiagnosticsDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
         self.p2pstatus = ""
-
 
     def ReadValue(self, options):
         logging.debug('Read diagnostics')
@@ -299,15 +295,11 @@ class DiagnosticsCharacteristic(Characteristic):
             self.p2pstatus = miner_interface.P2PStatus()
             logging.debug('DBUS P2P SUCCEED')
             logging.debug(self.p2pstatus)
-        except:
+        except dbus.exceptions.DBusException:
             self.p2pstatus = ""
             logging.debug('DBUS P2P FAIL')
-
-
         value = []
-
-        val = "moo"
-
+        val = "Debug"
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
@@ -341,7 +333,8 @@ class MacAddressCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('Read Mac Address')
         value = []
-        val = open("/sys/class/net/eth0/address").readline().strip().replace(":","")
+        val = open("/sys/class/net/eth0/address").readline().strip() \
+            .replace(":", "")
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
@@ -419,7 +412,6 @@ class WiFiSSIDCharacteristic(Characteristic):
                 if(network.in_use):
                     activeConnection = str(network.ssid)
                     print(activeConnection)
-
         value = []
 
         for c in activeConnection:
@@ -443,6 +435,7 @@ class WiFiSSIDDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class AssertLocationCharacteristic(Characteristic):
 
@@ -474,12 +467,12 @@ class AssertLocationCharacteristic(Characteristic):
 
         self.notifying = True
 
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue},
+                               [])
         self.add_timeout(30000, self.AddGatewayCallback)
 
     def StopNotify(self):
         self.notifying = False
-
 
     def WriteValue(self, value, options):
         logging.debug('Write Assert Location')
@@ -497,9 +490,11 @@ class AssertLocationCharacteristic(Characteristic):
         h3String = h3.geo_to_h3(assLocDet.lat, assLocDet.lon, 12)
         logging.debug(h3String)
         # H3String, Owner, Nonce, Amount, Fee, Paye
-        minerAssertRequest = miner_interface.AssertLocation(h3String,
-        assLocDet.owner, assLocDet.nonce, assLocDet.amount, assLocDet.fee,
-        assLocDet.payer)
+        minerAssertRequest = \
+            miner_interface. \
+            AssertLocation(h3String,
+                           assLocDet.owner, assLocDet.nonce, assLocDet.amount,
+                           assLocDet.fee, assLocDet.payer)
         logging.debug(assLocDet)
         self.notifyValue = minerAssertRequest
 
@@ -508,6 +503,7 @@ class AssertLocationCharacteristic(Characteristic):
 
         return self.notifyValue
 
+
 class AssertLocationDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -515,6 +511,7 @@ class AssertLocationDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         desc = uuids.ASSERT_LOCATION_VALUE
@@ -522,6 +519,7 @@ class AssertLocationDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class AddGatewayCharacteristic(Characteristic):
 
@@ -553,12 +551,12 @@ class AddGatewayCharacteristic(Characteristic):
 
         self.notifying = True
 
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue},
+                               [])
         self.add_timeout(30000, self.AddGatewayCallback)
 
     def StopNotify(self):
         self.notifying = False
-
 
     def WriteValue(self, value, options):
         logging.debug('Write  Add Gateway')
@@ -573,8 +571,10 @@ class AddGatewayCharacteristic(Characteristic):
         sleep(0.05)
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         sleep(0.05)
-        addMinerRequest = miner_interface.AddGateway(addGatewayDetails.owner,
-        addGatewayDetails.fee,addGatewayDetails.amount,addGatewayDetails.payer)
+        addMinerRequest = \
+            miner_interface. \
+            AddGateway(addGatewayDetails.owner, addGatewayDetails.fee,
+                       addGatewayDetails.amount, addGatewayDetails.payer)
         logging.debug(addMinerRequest)
         self.notifyValue = addMinerRequest
 
@@ -582,6 +582,7 @@ class AddGatewayCharacteristic(Characteristic):
         logging.debug('Read Add Gateway')
 
         return self.notifyValue
+
 
 class AddGatewayDescriptor(Descriptor):
 
@@ -598,6 +599,7 @@ class AddGatewayDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class WiFiConnectCharacteristic(Characteristic):
 
@@ -640,32 +642,29 @@ class WiFiConnectCharacteristic(Characteristic):
     def StopNotify(self):
         self.notifying = False
 
-
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Connect')
         if(self.checkWiFIStatus() == "connected"):
             nmcli.device.disconnect('wlan0')
             logging.debug('Disconnected From Wifi')
-        #logging.debug(value)
+        # logging.debug(value)
         wiFiDetails = wifi_connect_pb2.wifi_connect_v1()
-        #logging.debug('PB2C')
+        # logging.debug('PB2C')
         wiFiDetails.ParseFromString(bytes(value))
-        #logging.debug('PB2P')
+        # logging.debug('PB2P')
         self.WiFiStatus = "already"
         logging.debug(str(wiFiDetails.service))
 
-        nmcli.device.wifi_connect(str(wiFiDetails.service), str(wiFiDetails.password))
+        nmcli.device.wifi_connect(str(wiFiDetails.service),
+                                  str(wiFiDetails.password))
         self.WiFiStatus = self.checkWiFIStatus()
 
-
-
     def checkWiFIStatus(self):
-        #Check the current wi-fi connection status
+        # Check the current wi-fi connection status
         logging.debug('Check WiFi Connect')
         state = str(nmcli.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
         logging.debug(str(uuids.wifiStatus[state]))
         return uuids.wifiStatus[state]
-
 
     def ReadValue(self, options):
 
@@ -677,6 +676,7 @@ class WiFiConnectCharacteristic(Characteristic):
         for c in self.WiFiStatus:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class WiFiConnectDescriptor(Descriptor):
 
@@ -693,6 +693,7 @@ class WiFiConnectDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class WiFiRemoveCharacteristic(Characteristic):
 
@@ -748,6 +749,7 @@ class WiFiRemoveCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class WiFiRemoveDescriptor(Descriptor):
 
     def __init__(self, characteristic):
@@ -763,6 +765,7 @@ class WiFiRemoveDescriptor(Descriptor):
         for c in desc:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class EthernetOnlineCharacteristic(Characteristic):
 
@@ -781,12 +784,15 @@ class EthernetOnlineCharacteristic(Characteristic):
 
         val = "false"
 
-        if(open("/sys/class/net/eth0/carrier").readline().strip()== "1" or open("/sys/class/net/wlan0/carrier").readline().strip()== "1"):
+        if(open("/sys/class/net/eth0/carrier").readline().strip() == "1"
+                or open("/sys/class/net/wlan0/carrier").readline().strip()
+                == "1"):
             val = "true"
 
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
+
 
 class EthernetOnlineDescriptor(Descriptor):
 
@@ -795,7 +801,7 @@ class EthernetOnlineDescriptor(Descriptor):
                 self, uuids.USER_DESC_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
-                
+
     def ReadValue(self, options):
         value = []
         desc = uuids.ETHERNET_ONLINE_VALUE
@@ -804,6 +810,7 @@ class EthernetOnlineDescriptor(Descriptor):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class utf8Format(Descriptor):
 
     def __init__(self, characteristic):
@@ -811,6 +818,7 @@ class utf8Format(Descriptor):
                 self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         value.append(dbus.Byte(0x19))
@@ -822,6 +830,8 @@ class utf8Format(Descriptor):
         value.append(dbus.Byte(0x00))
 
         return value
+
+
 class opaqueStructure(Descriptor):
 
     def __init__(self, characteristic):
@@ -829,6 +839,7 @@ class opaqueStructure(Descriptor):
                 self, uuids.PRESENTATION_FORMAT_DESCRIPTOR_UUID,
                 ["read"],
                 characteristic)
+
     def ReadValue(self, options):
         value = []
         value.append(dbus.Byte(0x1B))
@@ -849,9 +860,10 @@ app.register()
 
 adv = ConfigAdvertisement(0)
 
-#Setup GPIO Devices
+# Setup GPIO Devices
 userButton = Button(26, hold_time=5)
 statusLed = LED(25)
+
 
 def ledThreadCode():
     logging.debug("LED Thread Started")
@@ -876,12 +888,15 @@ def ledThreadCode():
             statusLed.on()
             sleep(2)
 
+
 advertise = True
+
 
 def startAdvert():
     global advertise
     advertise = True
     logging.debug("Button press advertise queued")
+
 
 def advertisementThreadCode():
     global advertise
@@ -895,6 +910,7 @@ def advertisementThreadCode():
             sleep(600)
             adv.unregister()
             advertisementLED = False
+
 
 count = 0
 
