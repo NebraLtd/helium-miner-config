@@ -800,7 +800,7 @@ def buttonThreadCode():
 def advertisementThreadCode():
     adv.register()
     sleep(60)
-    adv.Release()
+    adv.unregister()
 
 count = 0
 try:

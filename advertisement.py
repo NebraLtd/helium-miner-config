@@ -135,3 +135,10 @@ class Advertisement(dbus.service.Object):
         ad_manager.RegisterAdvertisement(self.get_path(), {},
                                      reply_handler=self.register_ad_callback,
                                      error_handler=self.register_ad_error_callback)
+    def unregister(self):
+        bus = BleTools.get_bus()
+        adapter = BleTools.find_adapter(bus)
+
+        ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
+                                LE_ADVERTISING_MANAGER_IFACE)
+        ad_manager.UnregisterAdvertisement(self.get_path())
