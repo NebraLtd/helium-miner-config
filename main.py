@@ -790,6 +790,7 @@ adv.register()
 
 count = 0
 try:
+    print("Starting %s" % (count))
     # app.run()
     appThread = threading.Thread(target=app.run())
     appThread.setDaemon(True)
