@@ -810,7 +810,7 @@ def advertisementThreadCode():
     if(advertisementLED is False):
         adv.register()
         advertisementLED = True
-        sleep(600)
+        sleep(60)
         adv.unregister()
         advertisementLED = False
     else:
