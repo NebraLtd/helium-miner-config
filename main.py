@@ -9,17 +9,17 @@ from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
 
-#Disable sudo for nmcli
+# Disable sudo for nmcli
 nmcli.disable_use_sudo()
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(25,GPIO.OUT)
-GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(25,GPIO.OUT)
+# GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
 
-#Public Onboarding Keys
+# Public Onboarding Keys
 public_keys_file = open("/var/data/public_keys").readline().split('"')
 pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
@@ -786,10 +786,14 @@ app.register()
 adv = ConfigAdvertisement(0)
 adv.register()
 
-GPIO.output(25,1)
 
+count = 0
 try:
     app.run()
+    while True:
+        print("Tick %s" % (count))
+        count += 1
+        sleep(1)
 except KeyboardInterrupt:
     app.quit()
     GPIO.cleanup()
