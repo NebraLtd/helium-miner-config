@@ -795,13 +795,15 @@ def ledThreadCode():
     logging.debug("LED Thread Started")
     global advertisementLED
     while True:
+        statusLed.off()
         if(advertisementLED is True):
-            statusLed.blink(1,1)
+            statusLed.blink(1, 1, 1, False)
+            logging.debug("LED Slow blink")
         else:
             statusLed.on()
-        logging.debug("LED Thread Tick")
+            sleep(1)
+            logging.debug("Solid LED")
         print(str(advertisementLED))
-        sleep(1)
 
 
 def advertisementThreadCode():
