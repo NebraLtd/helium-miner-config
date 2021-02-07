@@ -788,7 +788,7 @@ app.register()
 adv = ConfigAdvertisement(0)
 
 #Setup GPIO Devices
-userButton = Button(26, hold_time=10)
+userButton = Button(26, hold_time=5)
 statusLed = LED(25)
 
 def ledThreadCode():
