@@ -8,6 +8,7 @@ from RPi import GPIO
 from advertisement import Advertisement
 from service import Application, Service, Characteristic, Descriptor
 import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
+import threading
 
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
@@ -789,7 +790,8 @@ adv.register()
 
 count = 0
 try:
-    app.run()
+    # app.run()
+    threading.Thread(target=app.run())
     while True:
         print("Tick %s" % (count))
         count += 1
