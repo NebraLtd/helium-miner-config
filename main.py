@@ -90,6 +90,7 @@ class ManufactureNameCharacteristic(Characteristic):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class FirmwareRevisionCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
@@ -107,8 +108,10 @@ class FirmwareRevisionCharacteristic(Characteristic):
             (supervisorAddress, supervisorKey)
         with urllib.request.urlopen(supervisorAddress) as url:
             data = json.loads(url.read().decode())
-            if(data[list(data)[0]]['services']['gateway-config']['status'] \
-                != "Running" or data[list(data)[0]]['services']['helium-miner']['status'] != "Running"):
+            if(data[list(data)[0]]['services']['gateway-config']['status']
+                != "Running" or
+                data[list(data)[0]]['services']['helium-miner']['status']
+                != "Running"):
                 val = "2000.01.01.01"
 
         value = []
