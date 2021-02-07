@@ -10,6 +10,8 @@ from service import Application, Service, Characteristic, Descriptor
 import add_gateway_pb2, assert_location_pb2, diagnostics_pb2, wifi_connect_pb2, wifi_remove_pb2, wifi_services_pb2
 import threading
 
+from gpiozero import Button, LED
+
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
 
@@ -786,7 +788,8 @@ app.register()
 
 adv = ConfigAdvertisement(0)
 
-#GPIO Code
+
+
 
 def ledThreadCode():
     while True:
@@ -803,11 +806,21 @@ def advertisementThreadCode():
     else:
         logging.debug("Already Advertising")
 
+def restart_btn():
+    print("Fake Restart")
+
 count = 0
 
 appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
+
+#GPIO Code
+
+advertisement_button = Button(26, hold_time=5)
+advertisement_button.when_held = advertisementThread.start()
+restart_button = Button(26, hold_time=30)
+restart_button.when_held = restart_btn
 
 # Main Loop Starts Here
 try:
