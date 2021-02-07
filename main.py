@@ -815,7 +815,7 @@ def ledThreadCode():
             sleep(2)
         print(str(advertisementLED))
 
-advertise = False
+advertise = True
 
 def startAdvert():
     global advertise
