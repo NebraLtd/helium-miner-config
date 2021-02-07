@@ -827,12 +827,12 @@ def advertisementThreadCode():
     logging.debug("Advertising Thread Started")
     while True:
         if(advertise is True):
-        advertise = False
-        adv.register()
-        advertisementLED = True
-        sleep(60)
-        adv.unregister()
-        advertisementLED = False
+            advertise = False
+            adv.register()
+            advertisementLED = True
+            sleep(60)
+            adv.unregister()
+            advertisementLED = False
 
 
 
