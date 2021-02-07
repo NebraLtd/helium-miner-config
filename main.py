@@ -794,6 +794,7 @@ def ledThreadCode():
         sleep(1)
 
 def advertisementThreadCode():
+    logging.debug("Advertising Thread Started")
     global advertisementLED
     if(advertisementLED is False):
         adv.register()
@@ -804,8 +805,8 @@ def advertisementThreadCode():
     else:
         logging.debug("Already Advertising")
 
-def restart_btn():
-    print("Fake Restart")
+userButton = Button(26, hold_time=10)
+userButton.when_held = advertisementThread.start
 
 count = 0
 
