@@ -813,7 +813,6 @@ def ledThreadCode():
         else:
             statusLed.on()
             sleep(2)
-        print(str(advertisementLED))
 
 advertise = True
 
@@ -834,8 +833,6 @@ def advertisementThreadCode():
             sleep(600)
             adv.unregister()
             advertisementLED = False
-
-
 
 count = 0
 
