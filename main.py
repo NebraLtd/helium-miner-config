@@ -149,6 +149,7 @@ class HeliumService(Service):
         self.add_characteristic(OnboardingKeyCharacteristic(self))
         self.add_characteristic(PublicKeyCharacteristic(self))
         self.add_characteristic(WiFiServicesCharacteristic(self))
+        self.add_characteristic(WiFiConfiguredServicesCharacteristic(self))
         self.add_characteristic(DiagnosticsCharacteristic(self))
         self.add_characteristic(MacAddressCharacteristic(self))
         self.add_characteristic(LightsCharacteristic(self))
