@@ -26,7 +26,7 @@ pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
 
-
+advertisementLED = False
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -786,34 +786,36 @@ app.register()
 
 adv = ConfigAdvertisement(0)
 
+#GPIO Code
 
 def ledThreadCode():
     while True:
         print("LED thread working")
         sleep(1)
 
-def buttonThreadCode():
-    while True:
-        print("Button thread working")
-        sleep(1)
-
 def advertisementThreadCode():
-    adv.register()
-    sleep(60)
-    adv.unregister()
+    if(advertismentLED is False):
+        adv.register()
+        advertisementLED = True
+        sleep(600)
+        adv.unregister()
+        advertisementLED = False
+    else:
+        logging.debug("Already Advertising")
 
 count = 0
+
+appThread = threading.Thread(target=app.run)
+ledThread = threading.Thread(target=ledThreadCode)
+advertisementThread = threading.Thread(target=advertisementThreadCode)
+
+# Main Loop Starts Here
 try:
     print("Starting %s" % (count))
     # app.run()
-    appThread = threading.Thread(target=app.run)
-    ledThread = threading.Thread(target=ledThreadCode)
-    buttonThread = threading.Thread(target=buttonThreadCode)
-    advertisementThread = threading.Thread(target=advertisementThreadCode)
     appThread.daemon = True
     appThread.start()
     ledThread.start()
-    buttonThread.start()
     advertisementThread.start()
 
 except KeyboardInterrupt:
