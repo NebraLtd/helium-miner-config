@@ -813,15 +813,14 @@ def advertisementThreadCode():
     else:
         logging.debug("Already Advertising")
 
-userButton.when_held = advertisementThread.start
-
 count = 0
 
 appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
 
-#GPIO Code
+userButton.when_held = advertisementThread.start
+
 
 # Main Loop Starts Here
 try:
