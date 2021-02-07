@@ -142,3 +142,4 @@ class Advertisement(dbus.service.Object):
         ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
                                 LE_ADVERTISING_MANAGER_IFACE)
         ad_manager.UnregisterAdvertisement(self.get_path())
+        print("GATT advertisement UNregistered")
