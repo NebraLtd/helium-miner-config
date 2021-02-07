@@ -2,10 +2,10 @@
 
 # Main imports
 import dbus
-import uuid
+# import uuid
 import logging
 import sys
-import  NetworkManager
+# import  NetworkManager
 import urllib.request
 import json
 import nmcli
@@ -15,7 +15,7 @@ import h3
 import threading
 
 # From imports
-from pprint import pprint
+# from pprint import pprint
 from time import sleep
 from RPi import GPIO
 
