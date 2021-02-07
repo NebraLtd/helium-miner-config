@@ -799,6 +799,8 @@ def ledThreadCode():
             statusLed.blink(1,1)
         else:
             statusLed.on()
+        logging.debug("LED Thread Tick")
+        sleep(1)
 
 
 def advertisementThreadCode():
