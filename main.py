@@ -787,6 +787,10 @@ app.register()
 adv = ConfigAdvertisement(0)
 adv.register()
 
+def testThread():
+    while True:
+        print("Test thread working")
+        sleep(1)
 
 count = 0
 try:
