@@ -786,6 +786,7 @@ app.register()
 
 adv = ConfigAdvertisement(0)
 
+
 def ledThreadCode():
     while True:
         print("LED thread working")
@@ -796,6 +797,10 @@ def buttonThreadCode():
         print("Button thread working")
         sleep(1)
 
+def advertisementThreadCode():
+    adv.register()
+    sleep(60)
+    adv.Release()
 
 count = 0
 try:
@@ -804,10 +809,13 @@ try:
     appThread = threading.Thread(target=app.run)
     ledThread = threading.Thread(target=ledThreadCode)
     buttonThread = threading.Thread(target=buttonThreadCode)
+    advertisementThread = threading.Thread(target=advertisementThreadCode)
     appThread.daemon = True
     appThread.start()
     ledThread.start()
     buttonThread.start()
+    advertisementThread.start()
+
 except KeyboardInterrupt:
     app.quit()
     GPIO.cleanup()
