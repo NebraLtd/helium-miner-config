@@ -34,18 +34,19 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 class ConfigAdvertisement(Advertisement):
-    #BLE advertisement
+    # BLE advertisement
     def __init__(self, index):
         Advertisement.__init__(self, index, "peripheral")
         variant = os.getenv('VARIANT')
-        macAddr = open("/sys/class/net/eth0/address").readline().strip().replace(":","")[-6:].upper()
+        macAddr = open("/sys/class/net/eth0/address").readline().
+        strip().replace(":","")[-6:].upper()
         localName = "Nebra %s Hotspot %s" % (variant, macAddr)
         self.add_local_name(localName)
         self.include_tx_power = True
         self.service_uuids = ["0fda92b2-44a2-4af2-84f5-fa682baa2b8d"]
 
 class DeviceInformationService(Service):
-    #Service that provides basic information
+    # Service that provides basic information
     def __init__(self, index):
         Service.__init__(self, index, uuids.DEVINFO_SVC_UUID, True)
         self.add_characteristic(ManufactureNameCharacteristic(self))
