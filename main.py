@@ -787,7 +787,7 @@ app.register()
 adv = ConfigAdvertisement(0)
 adv.register()
 
-def testThread():
+def testy():
     while True:
         print("Test thread working")
         sleep(1)
@@ -796,9 +796,11 @@ count = 0
 try:
     print("Starting %s" % (count))
     # app.run()
-    appThread = threading.Thread(target=app.run
+    appThread = threading.Thread(target=app.run)
+    testThread = threading.Thread(target=testy)
     appThread.daemon = True
     appThread.start()
+    testThread.start()
     while True:
         print("Tick %s" % (count))
         count += 1
