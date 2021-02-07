@@ -788,15 +788,13 @@ app.register()
 
 adv = ConfigAdvertisement(0)
 
-
-
-
 def ledThreadCode():
     while True:
         print("LED thread working")
         sleep(1)
 
 def advertisementThreadCode():
+    global advertisementLED
     if(advertisementLED is False):
         adv.register()
         advertisementLED = True
@@ -816,11 +814,6 @@ ledThread = threading.Thread(target=ledThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
 
 #GPIO Code
-
-advertisement_button = Button(26, hold_time=5)
-advertisement_button.when_held = advertisementThread.start()
-restart_button = Button(26, hold_time=30)
-restart_button.when_held = restart_btn
 
 # Main Loop Starts Here
 try:
