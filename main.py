@@ -806,7 +806,9 @@ def ledThreadCode():
         diagnosticsStatus = False
     while True:
         statusLed.off()
-        if(advertisementLED is True):
+        if(diagnosticsStatus is False):
+            statusLed.blink(0.1, 0.1, 10, False)
+        elif(advertisementLED is True):
             statusLed.blink(1, 1, 1, False)
         else:
             statusLed.on()
