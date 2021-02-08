@@ -144,7 +144,7 @@ class FirmwareService(Service):
 
     def __init__(self, index):
 
-        Service.__init__(self, index, self.FIRMWARE_SVC_UUID, True)
+        Service.__init__(self, index, UUIDs.FIRMWARE_SVC_UUID, True)
         self.add_characteristic(FirmwareVersionCharacteristic(self))
 
 
