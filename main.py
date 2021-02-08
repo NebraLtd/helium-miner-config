@@ -140,6 +140,47 @@ class SerialNumberCharacteristic(Characteristic):
         return value
 
 
+class FirmwareService(Service):
+    DEVINFO_SVC_UUID = "0000180a-0000-1000-8000-00805f9b34fb"
+
+    def __init__(self, index):
+
+        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
+        self.add_characteristic(FirmwareVersionCharacteristic(self))
+
+
+class FirmwareVersionCharacteristic(Characteristic):
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, uuids.FIRMWARE_VERSION_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        logging.debug('Read Firmware VERSION')
+
+        val = uuids.FIRMWARE_VERSION
+
+        supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
+        supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
+        supervisorAddress = "%s/v2/applications/state?apikey=%s" % \
+            (supervisorAddress, supervisorKey)
+        with urllib.request.urlopen(supervisorAddress) as url:
+            data = json.loads(url.read().decode())
+            if(data[list(data)[0]]['services']['gateway-config']['status']
+                    != "Running" or
+                    data[list(data)[0]]['services']['helium-miner']['status']
+                    != "Running"):
+                val = "2000.01.01.1"
+        loggin.debug(val)
+
+        value = []
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+
+        return value
+
+
 class HeliumService(Service):
     DEVINFO_SVC_UUID = "0fda92b2-44a2-4af2-84f5-fa682baa2b8d"
 
@@ -899,6 +940,7 @@ class opaqueStructure(Descriptor):
 app = Application()
 app.add_service(DeviceInformationService(0))
 app.add_service(HeliumService(1))
+app.add_service(FirmwareService(2))
 app.register()
 
 adv = ConfigAdvertisement(0)
