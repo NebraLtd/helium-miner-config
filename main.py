@@ -171,7 +171,7 @@ class FirmwareVersionCharacteristic(Characteristic):
                     data[list(data)[0]]['services']['helium-miner']['status']
                     != "Running"):
                 val = "2000.01.01.1"
-        loggin.debug(val)
+        logging.debug(val)
 
         value = []
 
