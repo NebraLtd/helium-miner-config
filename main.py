@@ -141,11 +141,10 @@ class SerialNumberCharacteristic(Characteristic):
 
 
 class FirmwareService(Service):
-    DEVINFO_SVC_UUID = "0000180a-0000-1000-8000-00805f9b34fb"
 
     def __init__(self, index):
 
-        Service.__init__(self, index, self.DEVINFO_SVC_UUID, True)
+        Service.__init__(self, index, self.FIRMWARE_SVC_UUID, True)
         self.add_characteristic(FirmwareVersionCharacteristic(self))
 
 
