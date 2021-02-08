@@ -141,12 +141,10 @@ class SerialNumberCharacteristic(Characteristic):
 
 
 class FirmwareService(Service):
-
+    # Service that provides basic information
     def __init__(self, index):
-
         Service.__init__(self, index, uuids.FIRMWARE_SVC_UUID, True)
         self.add_characteristic(FirmwareVersionCharacteristic(self))
-
 
 class FirmwareVersionCharacteristic(Characteristic):
     def __init__(self, service):
@@ -155,28 +153,11 @@ class FirmwareVersionCharacteristic(Characteristic):
                 ["read"], service)
 
     def ReadValue(self, options):
-        logging.debug('Read Firmware VERSION')
-
-        val = uuids.FIRMWARE_VERSION
-
-        supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
-        supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
-        supervisorAddress = "%s/v2/applications/state?apikey=%s" % \
-            (supervisorAddress, supervisorKey)
-        with urllib.request.urlopen(supervisorAddress) as url:
-            data = json.loads(url.read().decode())
-            if(data[list(data)[0]]['services']['gateway-config']['status']
-                    != "Running" or
-                    data[list(data)[0]]['services']['helium-miner']['status']
-                    != "Running"):
-                val = "2000.01.01.1"
-        logging.debug(val)
-
+        logging.debug('FIRMWARE VERSION')
         value = []
-
+        val = "2021.02.08.1"
         for c in val:
             value.append(dbus.Byte(c.encode()))
-
         return value
 
 
