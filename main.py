@@ -920,7 +920,7 @@ class opaqueStructure(Descriptor):
 app = Application()
 app.add_service(DeviceInformationService(0))
 app.add_service(HeliumService(1))
-app.add_service(FirmwareService(2))
+# app.add_service(FirmwareService(2))
 app.register()
 
 adv = ConfigAdvertisement(0)
