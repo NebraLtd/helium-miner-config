@@ -50,6 +50,7 @@ onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
 
 advertisementLED = False
+diagnosticsStatus = False
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
