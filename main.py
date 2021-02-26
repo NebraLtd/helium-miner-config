@@ -930,29 +930,36 @@ adv = ConfigAdvertisement(0)
 userButton = Button(26, hold_time=5)
 statusLed = LED(25)
 
+def diagnosticsThreadCode():
+    logging.debug("Diagnostics Thread Started")
+    global diagnosticsStatus
+    while True:
+        try:
+            diagnosticsJsonFile = open("/var/data/nebraDiagnostics.json")
+            diagnosticsJsonFile = json.load(diagnosticsJsonFile)
+            if(diagnosticsJsonFile['PF'] is True):
+                diagnosticsStatus = True
+            else:
+                diagnosticsStatus = False
+        except FileNotFoundError:
+            diagnosticsStatus = False
+        sleep(60)
 
 def ledThreadCode():
     logging.debug("LED Thread Started")
-    diagnosticsStatus = False
+    global diagnosticsStatus
     global advertisementLED
-    try:
-        diagnosticsJsonFile = open("/var/data/nebraDiagnostics.json")
-        diagnosticsJsonFile = json.load(diagnosticsJsonFile)
-        if(diagnosticsJsonFile['PF'] is True):
-            diagnosticsStatus = True
-        else:
-            diagnosticsStatus = False
-    except FileNotFoundError:
-        diagnosticsStatus = False
+
     while True:
         statusLed.off()
         if(diagnosticsStatus is False):
-            statusLed.blink(0.1, 0.1, 10, False)
+            statusLed.blink(0.1, 0.1, 20, False)
         elif(advertisementLED is True):
-            statusLed.blink(1, 1, 1, False)
+            statusLed.blink(1, 1, 10, False)
         else:
             statusLed.on()
-            sleep(2)
+            sleep(20)
+
 
 
 advertise = True
@@ -982,6 +989,7 @@ count = 0
 
 appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
+diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
 
 userButton.when_held = startAdvert
@@ -994,6 +1002,7 @@ try:
     appThread.daemon = True
     appThread.start()
     ledThread.start()
+    diagnosticsThread.start()
     advertisementThread.start()
 
 except KeyboardInterrupt:
