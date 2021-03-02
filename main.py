@@ -647,7 +647,7 @@ class AddGatewayCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
-
+        logging.debug(self.notifyValue)
         return self.notifyValue
 
 
