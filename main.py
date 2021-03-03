@@ -602,10 +602,10 @@ class AddGatewayCharacteristic(Characteristic):
     def AddGatewayCallback(self):
         if self.notifying:
             logging.debug('Callback Add Gateway')
-            #value = []
-            #val = ""
+            # value = []
+            # val = ""
 
-            #for c in val:
+            # for c in val:
             #    value.append(dbus.Byte(c.encode()))
             self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
 
@@ -626,7 +626,7 @@ class AddGatewayCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write  Add Gateway')
-        #logging.debug(value)
+        # logging.debug(value)
         addGatewayDetails = add_gateway_pb2.add_gateway_v1()
         logging.debug('PB2C')
         addGatewayDetails.ParseFromString(bytes(value))
@@ -641,7 +641,7 @@ class AddGatewayCharacteristic(Characteristic):
             miner_interface. \
             AddGateway(addGatewayDetails.owner, addGatewayDetails.fee,
                        addGatewayDetails.amount, addGatewayDetails.payer)
-        #logging.debug(addMinerRequest)
+        # logging.debug(addMinerRequest)
         logging.debug("Adding Response")
         self.notifyValue = addMinerRequest
 
@@ -954,6 +954,7 @@ def diagnosticsThreadCode():
             diagnosticsStatus = False
         sleep(60)
 
+
 def ledThreadCode():
     logging.debug("LED Thread Started")
     global diagnosticsStatus
@@ -968,8 +969,6 @@ def ledThreadCode():
         else:
             statusLed.on()
             sleep(20)
-
-
 
 advertise = True
 
