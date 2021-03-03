@@ -607,7 +607,8 @@ class AddGatewayCharacteristic(Characteristic):
 
             # for c in val:
             #    value.append(dbus.Byte(c.encode()))
-            self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.notifyValue}, [])
+            self.PropertiesChanged(GATT_CHRC_IFACE,
+                                  {"Value": self.notifyValue}, [])
 
     def StartNotify(self):
 
@@ -939,6 +940,7 @@ else:
 userButton = Button(buttonGPIO, hold_time=5)
 statusLed = LED(statusGPIO)
 
+
 def diagnosticsThreadCode():
     logging.debug("Diagnostics Thread Started")
     global diagnosticsStatus
@@ -969,6 +971,7 @@ def ledThreadCode():
         else:
             statusLed.on()
             sleep(20)
+
 
 advertise = True
 
