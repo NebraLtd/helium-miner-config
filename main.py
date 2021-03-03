@@ -929,8 +929,15 @@ app.register()
 adv = ConfigAdvertisement(0)
 
 # Setup GPIO Devices
-userButton = Button(26, hold_time=5)
-statusLed = LED(25)
+variant = os.getenv('VARIANT')
+if(variant == "Indoor"):
+    buttonGPIO = 26
+    statusGPIO = 25
+else:
+    buttonGPIO = 24
+    statusGPIO = 25
+userButton = Button(buttonGPIO, hold_time=5)
+statusLed = LED(statusGPIO)
 
 def diagnosticsThreadCode():
     logging.debug("Diagnostics Thread Started")
