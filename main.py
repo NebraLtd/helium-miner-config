@@ -103,17 +103,17 @@ class FirmwareRevisionCharacteristic(Characteristic):
 
         val = uuids.FIRMWARE_VERSION
 
-        supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
-        supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
-        supervisorAddress = "%s/v2/applications/state?apikey=%s" % \
-            (supervisorAddress, supervisorKey)
-        with urllib.request.urlopen(supervisorAddress) as url:
-            data = json.loads(url.read().decode())
-            if(data[list(data)[0]]['services']['gateway-config']['status']
-                    != "Running" or
-                    data[list(data)[0]]['services']['helium-miner']['status']
-                    != "Running"):
-                val = "2000.01.01.01"
+        #supervisorAddress = str(os.environ['BALENA_SUPERVISOR_ADDRESS'])
+        #supervisorKey = str(os.environ['BALENA_SUPERVISOR_API_KEY'])
+        #supervisorAddress = "%s/v2/applications/state?apikey=%s" % \
+        #    (supervisorAddress, supervisorKey)
+        #with urllib.request.urlopen(supervisorAddress) as url:
+        #    data = json.loads(url.read().decode())
+        #    if(data[list(data)[0]]['services']['gateway-config']['status']
+        #            != "Running" or
+        #            data[list(data)[0]]['services']['helium-miner']['status']
+        #            != "Running"):
+        #        val = "2000.01.01.01"
 
         value = []
 
