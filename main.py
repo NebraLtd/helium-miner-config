@@ -657,9 +657,13 @@ class AddGatewayCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logging.debug('Read Add Gateway')
-        logging.debug(options)
+        if("offset" in options):
+            cutDownArray = self.notifyValue[int(options["offset"]:]
+            return cutDownArray
+        else:
+            return self.notifyValue
         # logging.debug(self.notifyValue)
-        return self.notifyValue
+
 
 
 class AddGatewayDescriptor(Descriptor):
