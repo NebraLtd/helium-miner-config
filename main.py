@@ -556,19 +556,19 @@ class AssertLocationCharacteristic(Characteristic):
         miner_interface = dbus.Interface(miner_object, 'com.helium.Miner')
         sleep(0.05)
         h3String = h3.geo_to_h3(assLocDet.lat, assLocDet.lon, 12)
-        logging.debug(h3String)
+        # logging.debug(h3String)
         # H3String, Owner, Nonce, Amount, Fee, Paye
         minerAssertRequest = \
             miner_interface. \
             AssertLocation(h3String,
                            assLocDet.owner, assLocDet.nonce, assLocDet.amount,
                            assLocDet.fee, assLocDet.payer)
-        logging.debug(assLocDet)
+        # logging.debug(assLocDet)
         self.notifyValue = minerAssertRequest
 
     def ReadValue(self, options):
         logging.debug('Read Assert Location')
-        logging.debug(options)
+        # logging.debug(options)
         if("offset" in options):
             cutDownArray = self.notifyValue[int(options["offset"]):]
             return cutDownArray
@@ -642,10 +642,10 @@ class AddGatewayCharacteristic(Characteristic):
 
         # logging.debug(value)
         addGatewayDetails = add_gateway_pb2.add_gateway_v1()
-        logging.debug('PB2C')
+        # logging.debug('PB2C')
         addGatewayDetails.ParseFromString(bytes(value))
-        logging.debug('PB2P')
-        logging.debug(str(addGatewayDetails))
+        # logging.debug('PB2P')
+        # logging.debug(str(addGatewayDetails))
         miner_bus = dbus.SystemBus()
         miner_object = miner_bus.get_object('com.helium.Miner', '/')
         sleep(0.05)
@@ -655,7 +655,7 @@ class AddGatewayCharacteristic(Characteristic):
             miner_interface. \
             AddGateway(addGatewayDetails.owner, addGatewayDetails.fee,
                        addGatewayDetails.amount, addGatewayDetails.payer)
-        logging.debug(addMinerRequest)
+        # logging.debug(addMinerRequest)
         logging.debug("Adding Response")
         self.notifyValue = addMinerRequest
 
@@ -749,7 +749,7 @@ class WiFiConnectCharacteristic(Characteristic):
         # Check the current wi-fi connection status
         logging.debug('Check WiFi Connect')
         state = str(nmcli.device.show('wlan0')['GENERAL.STATE'].split(" ")[0])
-        logging.debug(str(uuids.wifiStatus[state]))
+        # logging.debug(str(uuids.wifiStatus[state]))
         return uuids.wifiStatus[state]
 
     def ReadValue(self, options):
@@ -823,7 +823,7 @@ class WiFiRemoveCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         logging.debug('Write WiFi Remove')
-        logging.debug(value)
+        # logging.debug(value)
 
     def ReadValue(self, options):
 
