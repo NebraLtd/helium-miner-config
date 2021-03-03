@@ -568,8 +568,12 @@ class AssertLocationCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logging.debug('Read Assert Location')
-
-        return self.notifyValue
+        logging.debug(options)
+        if("offset" in options):
+            cutDownArray = self.notifyValue[int(options["offset"]):]
+            return cutDownArray
+        else:
+            return self.notifyValue
 
 
 class AssertLocationDescriptor(Descriptor):
