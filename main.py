@@ -597,9 +597,11 @@ class AddGatewayCharacteristic(Characteristic):
                 ["read", "write", "notify"], service)
         self.add_descriptor(AddGatewayDescriptor(self))
         self.add_descriptor(opaqueStructure(self))
-        self.notifyValue = []
-        for c in "init":
-            self.notifyValue.append(dbus.Byte(c.encode()))
+        #self.notifyValue = []
+        #for c in "init":
+        #    self.notifyValue.append(dbus.Byte(c.encode()))
+
+        self.notifyValue = dbus.Array([dbus.Byte(13), dbus.Byte(53), dbus.Byte(59), dbus.Byte(82), dbus.Byte(66), dbus.Byte(21), dbus.Byte(171), dbus.Byte(65), dbus.Byte(220), dbus.Byte(63), dbus.Byte(26), dbus.Byte(51), dbus.Byte(49), dbus.Byte(52), dbus.Byte(104), dbus.Byte(101), dbus.Byte(101), dbus.Byte(105), dbus.Byte(68), dbus.Byte(69), dbus.Byte(57), dbus.Byte(67), dbus.Byte(49), dbus.Byte(87), dbus.Byte(74), dbus.Byte(68), dbus.Byte(97), dbus.Byte(116), dbus.Byte(52), dbus.Byte(57), dbus.Byte(118), dbus.Byte(71), dbus.Byte(74), dbus.Byte(118), dbus.Byte(120), dbus.Byte(65), dbus.Byte(100), dbus.Byte(88), dbus.Byte(66), dbus.Byte(90), dbus.Byte(99), dbus.Byte(88), dbus.Byte(78), dbus.Byte(78), dbus.Byte(89), dbus.Byte(69), dbus.Byte(98), dbus.Byte(87), dbus.Byte(85), dbus.Byte(112), dbus.Byte(83), dbus.Byte(70), dbus.Byte(88), dbus.Byte(104), dbus.Byte(117), dbus.Byte(89), dbus.Byte(118), dbus.Byte(50), dbus.Byte(115), dbus.Byte(87), dbus.Byte(89), dbus.Byte(89), dbus.Byte(98), dbus.Byte(32), dbus.Byte(1), dbus.Byte(40), dbus.Byte(240), dbus.Byte(162), dbus.Byte(4), dbus.Byte(48), dbus.Byte(192), dbus.Byte(132), dbus.Byte(61), dbus.Byte(58), dbus.Byte(51), dbus.Byte(49), dbus.Byte(51), dbus.Byte(56), dbus.Byte(76), dbus.Byte(98), dbus.Byte(101), dbus.Byte(80), dbus.Byte(72), dbus.Byte(52), dbus.Byte(114), dbus.Byte(55), dbus.Byte(104), dbus.Byte(87), dbus.Byte(80), dbus.Byte(117), dbus.Byte(84), dbus.Byte(110), dbus.Byte(75), dbus.Byte(54), dbus.Byte(72), dbus.Byte(88), dbus.Byte(86), dbus.Byte(74), dbus.Byte(56), dbus.Byte(65), dbus.Byte(84), dbus.Byte(77), dbus.Byte(50), dbus.Byte(81), dbus.Byte(85), dbus.Byte(55), dbus.Byte(49), dbus.Byte(105), dbus.Byte(86), dbus.Byte(72), dbus.Byte(122), dbus.Byte(76), dbus.Byte(84), dbus.Byte(117), dbus.Byte(112), dbus.Byte(49), dbus.Byte(85), dbus.Byte(98), dbus.Byte(110), dbus.Byte(80), dbus.Byte(68), dbus.Byte(118), dbus.Byte(98), dbus.Byte(120), dbus.Byte(109), dbus.Byte(114)], signature=dbus.Signature('y'))
 
     def AddGatewayCallback(self):
         if self.notifying:
