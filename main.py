@@ -306,14 +306,16 @@ class WiFiConfiguredServicesCharacteristic(Characteristic):
 
     def ReadValue(self, options):
         logging.debug('Read WiFi CONFIGURED Services')
-        # wifiSsids = wifi_services_pb2.wifi_services_v1()
+        wifiConfigured = wifi_services_pb2.wifi_services_v1()
 
-        # for network in nmcli.device.wifi():
-        #    if(network.ssid != "--"):
-        #        wifiSsids.services.append(str(network.ssid))
-        #        logging.debug(str(network.ssid))
+        for network in nmcli.device.wifi():
+            if(network.ssid != "--"):
+                if(network.in_use):
+                    activeConnection = str(network.ssid)
+                    wifiConfigured.services.append(activeConnection)
+                    print(activeConnection)
         value = []
-        val = ""
+        val = wifiConfigured.SerializeToString()
 
         for c in val:
             value.append(dbus.Byte(c))
