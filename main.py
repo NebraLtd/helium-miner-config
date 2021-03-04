@@ -157,7 +157,7 @@ class FirmwareVersionCharacteristic(Characteristic):
     def ReadValue(self, options):
         logging.debug('FIRMWARE VERSION')
         value = []
-        val = "2021.02.08.1"
+        val = "2021.03.04.1"
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
@@ -941,7 +941,7 @@ class opaqueStructure(Descriptor):
 app = Application()
 app.add_service(DeviceInformationService(0))
 app.add_service(HeliumService(1))
-# app.add_service(FirmwareService(2))
+app.add_service(FirmwareService(2))
 app.register()
 
 adv = ConfigAdvertisement(0)
