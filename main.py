@@ -181,6 +181,7 @@ class HeliumService(Service):
         self.add_characteristic(AddGatewayCharacteristic(self))
         self.add_characteristic(WiFiConnectCharacteristic(self))
         self.add_characteristic(EthernetOnlineCharacteristic(self))
+        self.add_characteristic(SoftwareVersionCharacteristic(self))
 
 
 class OnboardingKeyCharacteristic(Characteristic):
@@ -893,6 +894,24 @@ class EthernetOnlineDescriptor(Descriptor):
 
         for c in desc:
             value.append(dbus.Byte(c.encode()))
+        return value
+
+class SoftwareVersionCharacteristic(Characteristic):
+    def __init__(self, service):
+        Characteristic.__init__(
+                self, uuids.SOFTWARE_VERSION_CHARACTERISTIC_UUID,
+                ["read"], service)
+
+    def ReadValue(self, options):
+        logging.debug('Read Firmware')
+
+        val = uuids.FIRMWARE_VERSION
+
+        value = []
+
+        for c in val:
+            value.append(dbus.Byte(c.encode()))
+
         return value
 
 
