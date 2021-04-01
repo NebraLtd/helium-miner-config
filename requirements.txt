@@ -1,0 +1,7 @@
+h3
+RPi.gpio
+colorzero
+gpiozero
+protobuf
+pgi
+dbus
