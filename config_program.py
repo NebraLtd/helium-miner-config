@@ -2,11 +2,8 @@
 
 # Main imports
 import dbus
-# import uuid
 import logging
 import sys
-# import  NetworkManager
-import urllib.request
 import json
 import nmcli
 import uuids
