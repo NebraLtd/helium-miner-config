@@ -590,7 +590,6 @@ class AddGatewayCharacteristic(Characteristic):
         for c in "init":
             self.notifyValue.append(dbus.Byte(c.encode()))
 
-
     def AddGatewayCallback(self):
         if self.notifying:
             logging.debug('Callback Add Gateway')
@@ -600,7 +599,7 @@ class AddGatewayCharacteristic(Characteristic):
             # for c in val:
             #    value.append(dbus.Byte(c.encode()))
             self.PropertiesChanged(GATT_CHRC_IFACE,
-                                  {"Value": self.notifyValue}, [])
+                                   {"Value": self.notifyValue}, [])
 
     def StartNotify(self):
 
@@ -651,7 +650,6 @@ class AddGatewayCharacteristic(Characteristic):
         else:
             return self.notifyValue
         # logging.debug(self.notifyValue)
-
 
 
 class AddGatewayDescriptor(Descriptor):
@@ -880,6 +878,7 @@ class EthernetOnlineDescriptor(Descriptor):
             value.append(dbus.Byte(c.encode()))
         return value
 
+
 class SoftwareVersionCharacteristic(Characteristic):
     def __init__(self, service):
         Characteristic.__init__(
@@ -944,7 +943,6 @@ class opaqueStructure(Descriptor):
 app = Application()
 app.add_service(DeviceInformationService(0))
 app.add_service(HeliumService(1))
-#app.add_service(FirmwareService(2))
 app.register()
 
 adv = ConfigAdvertisement(0)
