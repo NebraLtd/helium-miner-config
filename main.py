@@ -999,14 +999,13 @@ def ledThreadCode():
     global advertisementLED
 
     while True:
-        statusLed.off()
         if(diagnosticsStatus is False):
             statusLed.blink(0.1, 0.1, 20, False)
         elif(advertisementLED is True):
             statusLed.blink(1, 1, 10, False)
         else:
             statusLed.on()
-            sleep(20)
+            sleep(5)
 
 
 advertise = True
