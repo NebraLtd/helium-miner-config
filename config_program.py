@@ -852,9 +852,7 @@ class EthernetOnlineCharacteristic(Characteristic):
 
         val = "false"
 
-        if(open("/sys/class/net/eth0/carrier").readline().strip() == "1"
-                or open("/sys/class/net/wlan0/carrier").readline().strip()
-                == "1"):
+        if(open("/sys/class/net/eth0/carrier").readline().strip() == "1"):
             val = "true"
 
         for c in val:
