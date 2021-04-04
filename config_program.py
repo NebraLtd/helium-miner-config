@@ -1009,6 +1009,8 @@ def advertisementThreadCode():
             sleep(600)
             adv.unregister()
             advertisementLED = False
+        else:
+            sleep(5)
 
 
 count = 0
