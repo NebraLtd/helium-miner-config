@@ -998,6 +998,7 @@ def advertisementThreadCode():
         else:
             sleep(5)
 
+
 def wifiThreadCode():
     global scanWifi
     global wifiCache
