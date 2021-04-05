@@ -43,9 +43,10 @@ pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
 
+# Setup Thread Variables
 advertisementLED = False
 diagnosticsStatus = False
-
+scanWifi = False
 wifiCache = []
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
@@ -977,15 +978,30 @@ def startAdvert():
 def advertisementThreadCode():
     global advertise
     global advertisementLED
+    global scanWifi
     logging.debug("Advertising Thread Started")
     while True:
         if(advertise is True):
             advertise = False
+            scanWifi = True
             adv.register()
             advertisementLED = True
             sleep(600)
             adv.unregister()
             advertisementLED = False
+        else:
+            sleep(5)
+
+def wifiThreadCode():
+    global scanWifi
+    global wifiCache
+    logging.debug("WiFi Thread Started")
+    while True:
+        if(scanWifi is True):
+            logging.debug("Wi-Fi Scanning")
+            wifiCache = nmcli.device.wifi()
+            logging.debug("Wi-Fi Complete")
+            sleep(10)
         else:
             sleep(5)
 
@@ -996,6 +1012,7 @@ appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
 diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
+wifiThread = threading.Thread(target=wifiThreadCode)
 
 userButton.when_held = startAdvert
 
