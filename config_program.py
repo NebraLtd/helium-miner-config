@@ -1031,6 +1031,7 @@ try:
     appThread.start()
     ledThread.start()
     diagnosticsThread.start()
+    wifiThread.start()
     advertisementThread.start()
 
 except KeyboardInterrupt:
