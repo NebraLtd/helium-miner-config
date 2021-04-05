@@ -218,6 +218,8 @@ class PublicKeyDescriptor(Descriptor):
 
 class WiFiServicesCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
@@ -229,7 +231,7 @@ class WiFiServicesCharacteristic(Characteristic):
         logging.debug('Read WiFi Services')
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 wifiSsids.services.append(str(network.ssid))
                 logging.debug(str(network.ssid))
@@ -260,6 +262,8 @@ class WiFiServicesDescriptor(Descriptor):
 
 class WiFiConfiguredServicesCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID,
@@ -271,7 +275,7 @@ class WiFiConfiguredServicesCharacteristic(Characteristic):
         logging.debug('Read WiFi CONFIGURED Services')
         wifiConfigured = wifi_services_pb2.wifi_services_v1()
 
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 if(network.in_use):
                     activeConnection = str(network.ssid)
@@ -427,6 +431,8 @@ class LightsDescriptor(Descriptor):
 
 class WiFiSSIDCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_SSID_CHARACTERISTIC_UUID,
@@ -438,7 +444,7 @@ class WiFiSSIDCharacteristic(Characteristic):
 
         logging.debug('Read WiFi SSID')
         activeConnection = ""
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 if(network.in_use):
                     activeConnection = str(network.ssid)
