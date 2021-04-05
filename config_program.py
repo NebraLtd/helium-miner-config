@@ -33,9 +33,6 @@ from gpiozero import Button, LED
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
 
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(25,GPIO.OUT)
-# GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
@@ -48,6 +45,8 @@ animalName = str(public_keys_file[5])
 
 advertisementLED = False
 diagnosticsStatus = False
+
+wifiCache = []
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -120,28 +119,6 @@ class SerialNumberCharacteristic(Characteristic):
         val = open("/sys/class/net/eth0/address").readline() \
             .strip().replace(":", "")
 
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
-
-
-class FirmwareService(Service):
-    # Service that provides basic information
-    def __init__(self, index):
-        Service.__init__(self, index, uuids.FIRMWARE_SVC_UUID, True)
-        self.add_characteristic(FirmwareVersionCharacteristic(self))
-
-
-class FirmwareVersionCharacteristic(Characteristic):
-    def __init__(self, service):
-        Characteristic.__init__(
-                self, uuids.FIRMWARE_VERSION_CHARACTERISTIC_UUID,
-                ["read"], service)
-
-    def ReadValue(self, options):
-        logging.debug('FIRMWARE VERSION')
-        value = []
-        val = "2021.03.04.1"
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
