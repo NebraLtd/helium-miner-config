@@ -7,7 +7,8 @@ import sentry_sdk
 
 sentryKey = os.getenv('SENTRY_CONFIG')
 sentry_sdk.init(sentryKey, traces_sample_rate=1.0)
-sentry_sdk.set_user({"id" : os.getenv('BALENA_DEVICE_UUID')})
+balenaId = os.getenv('BALENA_DEVICE_UUID')
+sentry_sdk.set_user({"id" : balenaId})
 
 # Main imports
 import dbus
