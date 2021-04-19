@@ -1,5 +1,13 @@
 #!/usr/bin/python3
 
+import os
+import sentry_sdk
+
+# ET Phone Home
+
+sentryKey = os.getenv('SENTRY_CONFIG')
+sentry_sdk.init(sentryKey, traces_sample_rate=1.0)
+
 # Main imports
 import dbus
 import logging
@@ -7,7 +15,7 @@ import sys
 import json
 import nmcli
 import uuids
-import os
+
 import h3
 import threading
 
