@@ -41,9 +41,6 @@ from gpiozero import Button, LED
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
 
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(25,GPIO.OUT)
-# GPIO.setup(26,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 NOTIFY_TIMEOUT = 5000
@@ -54,8 +51,11 @@ pubKey = str(public_keys_file[1])
 onboardingKey = str(public_keys_file[3])
 animalName = str(public_keys_file[5])
 
+# Setup Thread Variables
 advertisementLED = False
 diagnosticsStatus = False
+scanWifi = False
+wifiCache = []
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
@@ -128,28 +128,6 @@ class SerialNumberCharacteristic(Characteristic):
         val = open("/sys/class/net/eth0/address").readline() \
             .strip().replace(":", "")
 
-        for c in val:
-            value.append(dbus.Byte(c.encode()))
-        return value
-
-
-class FirmwareService(Service):
-    # Service that provides basic information
-    def __init__(self, index):
-        Service.__init__(self, index, uuids.FIRMWARE_SVC_UUID, True)
-        self.add_characteristic(FirmwareVersionCharacteristic(self))
-
-
-class FirmwareVersionCharacteristic(Characteristic):
-    def __init__(self, service):
-        Characteristic.__init__(
-                self, uuids.FIRMWARE_VERSION_CHARACTERISTIC_UUID,
-                ["read"], service)
-
-    def ReadValue(self, options):
-        logging.debug('FIRMWARE VERSION')
-        value = []
-        val = "2021.03.04.1"
         for c in val:
             value.append(dbus.Byte(c.encode()))
         return value
@@ -248,6 +226,8 @@ class PublicKeyDescriptor(Descriptor):
 
 class WiFiServicesCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_SERVICES_CHARACTERISTIC_UUID,
@@ -259,7 +239,7 @@ class WiFiServicesCharacteristic(Characteristic):
         logging.debug('Read WiFi Services')
         wifiSsids = wifi_services_pb2.wifi_services_v1()
 
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 wifiSsids.services.append(str(network.ssid))
                 logging.debug(str(network.ssid))
@@ -290,6 +270,8 @@ class WiFiServicesDescriptor(Descriptor):
 
 class WiFiConfiguredServicesCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_CONFIGURED_SERVICES_CHARACTERISTIC_UUID,
@@ -301,7 +283,7 @@ class WiFiConfiguredServicesCharacteristic(Characteristic):
         logging.debug('Read WiFi CONFIGURED Services')
         wifiConfigured = wifi_services_pb2.wifi_services_v1()
 
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 if(network.in_use):
                     activeConnection = str(network.ssid)
@@ -457,6 +439,8 @@ class LightsDescriptor(Descriptor):
 
 class WiFiSSIDCharacteristic(Characteristic):
 
+    global wifiCache
+
     def __init__(self, service):
         Characteristic.__init__(
                 self, uuids.WIFI_SSID_CHARACTERISTIC_UUID,
@@ -468,7 +452,7 @@ class WiFiSSIDCharacteristic(Characteristic):
 
         logging.debug('Read WiFi SSID')
         activeConnection = ""
-        for network in nmcli.device.wifi():
+        for network in wifiCache:
             if(network.ssid != "--"):
                 if(network.in_use):
                     activeConnection = str(network.ssid)
@@ -1008,15 +992,34 @@ def startAdvert():
 def advertisementThreadCode():
     global advertise
     global advertisementLED
+    global scanWifi
     logging.debug("Advertising Thread Started")
     while True:
         if(advertise is True):
             advertise = False
+            scanWifi = True
             adv.register()
             advertisementLED = True
             sleep(600)
             adv.unregister()
             advertisementLED = False
+            scanWifi = False
+        else:
+            sleep(5)
+
+
+def wifiThreadCode():
+    global scanWifi
+    global wifiCache
+    logging.debug("WiFi Thread Started")
+    while True:
+        if(scanWifi is True):
+            logging.debug("Wi-Fi Scanning")
+            wifiCache = nmcli.device.wifi()
+            logging.debug("Wi-Fi Complete")
+            sleep(10)
+        else:
+            sleep(5)
 
 
 count = 0
@@ -1025,6 +1028,7 @@ appThread = threading.Thread(target=app.run)
 ledThread = threading.Thread(target=ledThreadCode)
 diagnosticsThread = threading.Thread(target=diagnosticsThreadCode)
 advertisementThread = threading.Thread(target=advertisementThreadCode)
+wifiThread = threading.Thread(target=wifiThreadCode)
 
 userButton.when_held = startAdvert
 
@@ -1037,6 +1041,7 @@ try:
     appThread.start()
     ledThread.start()
     diagnosticsThread.start()
+    wifiThread.start()
     advertisementThread.start()
 
 except KeyboardInterrupt:
