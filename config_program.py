@@ -6,7 +6,7 @@ import sentry_sdk
 # ET Phone Home
 
 sentryKey = os.getenv('SENTRY_CONFIG')
-sentry_sdk.init(sentryKey, traces_sample_rate=1.0)
+sentry_sdk.init(sentryKey, traces_sample_rate=1.0, environment="BALENA_APP_NAME")
 balenaId = os.getenv('BALENA_DEVICE_UUID')
 sentry_sdk.set_user({"id" : balenaId})
 
