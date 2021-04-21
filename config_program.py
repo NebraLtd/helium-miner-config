@@ -3,14 +3,6 @@
 import os
 import sentry_sdk
 
-# ET Phone Home
-
-sentry_key = os.getenv('SENTRY_CONFIG')
-balena_id = os.getenv('BALENA_DEVICE_UUID')
-balena_app = os.getenv('BALENA_APP_NAME')
-sentry_sdk.init(sentry_key, traces_sample_rate=1.0, environment=balena_app)
-sentry_sdk.set_user({"id" : balena_id})
-
 # Main imports
 import dbus
 import logging
@@ -40,6 +32,14 @@ import wifi_connect_pb2
 import wifi_services_pb2
 
 from gpiozero import Button, LED
+
+# ET Phone Home
+
+sentry_key = os.getenv('SENTRY_CONFIG')
+balena_id = os.getenv('BALENA_DEVICE_UUID')
+balena_app = os.getenv('BALENA_APP_NAME')
+sentry_sdk.init(sentry_key, environment=balena_app)
+sentry_sdk.set_user({"id": balena_id})
 
 # Disable sudo for nmcli
 nmcli.disable_use_sudo()
